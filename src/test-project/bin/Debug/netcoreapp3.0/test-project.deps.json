@@ -8,10 +8,19 @@
     ".NETCoreApp,Version=v3.0": {
       "test-project/1.0.0": {
         "dependencies": {
+          "MathNet.Numerics": "4.9.0",
           "Microsoft.ML.Probabilistic.Compiler": "0.3.1810.501"
         },
         "runtime": {
           "test-project.dll": {}
+        }
+      },
+      "MathNet.Numerics/4.9.0": {
+        "runtime": {
+          "lib/netstandard2.0/MathNet.Numerics.dll": {
+            "assemblyVersion": "4.9.0.0",
+            "fileVersion": "4.9.0.0"
+          }
         }
       },
       "Microsoft.CodeAnalysis.Analyzers/1.1.0": {},
@@ -777,6 +786,13 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "MathNet.Numerics/4.9.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-4cYzhuMDq57oC6lwhMmuigdhP+oywmp1bMtFzvzz4wYr5eWbg0JLDPo/L1juqDkIBj+rc3FrxUEX7jcHRmnF+w==",
+      "path": "mathnet.numerics/4.9.0",
+      "hashPath": "mathnet.numerics.4.9.0.nupkg.sha512"
     },
     "Microsoft.CodeAnalysis.Analyzers/1.1.0": {
       "type": "package",

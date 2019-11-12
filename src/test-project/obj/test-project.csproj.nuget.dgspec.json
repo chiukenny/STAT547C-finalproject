@@ -38,6 +38,10 @@
       "frameworks": {
         "netcoreapp3.0": {
           "dependencies": {
+            "MathNet.Numerics": {
+              "target": "Package",
+              "version": "[4.9.0, )"
+            },
             "Microsoft.ML.Probabilistic.Compiler": {
               "target": "Package",
               "version": "[0.3.1810.501, )"
