@@ -1,0 +1,76 @@
+\documentclass{article}
+
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{hyperref}
+
+
+\begin{document}
+
+\begin{itemize}
+
+\item
+Symmetry $\sigma:\Theta\rightarrow\Theta$ is a measurable function with a measurable inverse satisfying
+\[
+\Pi_kF_k(\theta)\propto\Pi_kF_k\left(\sigma(\theta)\right)
+\]
+
+\item
+Local symmetry $\sigma$ satisfies
+\[
+F_k(\theta) \propto F_k\left(\sigma(\theta)\right)
+\]
+
+\item
+Class of transformations of model parameters $T\subset\{f:\Theta\rightarrow\Theta\}$. Subset of local symmetries contained in $T$ $S_T\subset T$ defined by
+\[
+S_T=\{\sigma\in T|\sigma \text{ is a local symmetry }\} = \bigcap_k\{\sigma\in T | F_k(\theta)\propto F_k\left(\sigma(\theta)\right)\}
+\]
+
+\item
+Scaling symmety is a symmetry $\sigma$ which multiplies $\theta$ pointwise by a vector
+\[
+v=(r_1,...,r_N) = (e^{d_1},...,e^{d_N})
+\]
+where $r_n\in \mathbb{R}_+$ and $d_n=\log r_n$.
+
+Case of $r_n\in\mathbb{R}_-$ is covered by a combination of scaling symmetry and sign-flip symmetry.
+
+Let $\Sigma(v)$ be the diagonal matrix with $v$ on the diagonal. Then $\sigma(\theta)=\Sigma(v)\theta$.
+
+Let matrix $C$ be the matrix of constraints on $d_n$. The scaling symmetries of the model are the vectors in the null space of $C$, $\mathcal{N}(C)$.
+
+Let $d=(d_1,...,d_N)$. Let $v(d) = (e^{d_1},...,e^{d_N})$. Then the scaling symmetries of the model are $\sigma_{d}(\theta)=\Sigma(v(d))\theta$, $d\in\mathcal{N}(C)$.
+
+Then $\{\Sigma(v(d))\theta:d\in\mathcal{N}(C)\}\subset\Theta$ is an equivalence class for the model $(\theta,F)$.
+
+Definition 1?
+
+Let $\Xi$ be a $\sigma$-algebra on $\Theta$. A symmetry breaker $\phi:\Xi\rightarrow\Theta$? is a deterministic function that satisfies
+\begin{enumerate}
+
+\item
+$\phi(\emptyset)$ is undefined?
+
+\item
+for $\mathcal{T}\in\Xi$, $\phi(\mathcal{T})=\theta$ where $\theta\in\mathcal{T}$
+
+\end{enumerate}
+
+Definition 2?
+
+A symmetry breaker $\phi:\Theta\rightarrow\Theta$ is a deterministic measurable function that satisfies
+
+\href{https://en.wikipedia.org/wiki/Equivalence_class}{Equivalence class}
+
+- symmetry detection: canonical surjection?
+
+- symmetry breaking: section?
+
+\end{itemize}
+
+
+
+
+\end{document}
