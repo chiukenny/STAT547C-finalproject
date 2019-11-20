@@ -13,7 +13,7 @@
 \item
 Symmetry $\sigma:\Theta\rightarrow\Theta$ is a measurable function with a measurable inverse satisfying
 \[
-\Pi_kF_k(\theta)\propto\Pi_kF_k\left(\sigma(\theta)\right)
+\prod_kF_k(\theta)\propto\prod_kF_k\left(\sigma(\theta)\right)
 \]
 
 \item
@@ -29,44 +29,78 @@ S_T=\{\sigma\in T|\sigma \text{ is a local symmetry }\} = \bigcap_k\{\sigma\in T
 \]
 
 \item
+\href{https://en.wikipedia.org/wiki/Equivalence_class}{Equivalence class} definition
+
+A factor graph (model?) with equivalence relation $\Xi$, denoted $\mathcal{F}=(\theta,F,\Xi)$, induces a partition of $\Theta$ into equivalence classes, with the equivalence relation $\Xi$ that there exists a symmetry between any two members of an equivalence class. $\Xi$ specifies the type of symmetry.
+
+Classes may be singletons if the point is symmetric only to itself.
+
+Denote $[\theta]$ to be the equivalence class of $\theta$.
+
+Denote $\Theta/\Xi$ to be the set of all equivalence classes in $\Theta$ w.r.t $\Xi$, called the quotient set of $\Theta$ by $\Xi$.
+
+\item
+A symmetry detector $\Delta_\mathcal{F}:\Theta\rightarrow\Theta/\Xi$ is a measurable? function that maps $\theta$ to $[\theta]$ w.r.t. $\Xi$.
+
+\item
+Definition 1: A symmetry breaker $\phi_\mathcal{F}:\Theta/\Xi\rightarrow\Theta$ is a measurable function that maps $[\theta]$ to $\theta_0$ w.r.t. $\Xi$ where $\theta_0$ is a representative of $[\theta]$.
+
+Definition 2: A symmetry breaker $\phi_\mathcal{F}:\Theta/\Xi\rightarrow\Theta$ is a measurable function that maps $[\theta]$ to $\theta\in[\theta]$ w.r.t. $\Xi$.
+
+\item
+An automatic symmetry breaker $\Phi_\mathcal{F}:\Theta\rightarrow\Theta$ is the composition $\Phi_\mathcal{F}=\phi_\mathcal{F}\circ\Delta_\mathcal{F}$ of a symmetry breaker with the corresponding symmetry detector.
+
+A symmetry broken posterior distribution is a posterior distribution that has the (unnormalized) form
+\[
+\prod_kF_k(\Phi_{\mathcal{F}_M}\circ ... \circ \Phi_{\mathcal{F}_1}(\theta))
+\]
+where $\mathcal{F}_1,...,\mathcal{F}_M$ have equivalence relations $\Xi_1,...,\Xi_M$ corresponding to different types of symmetries equipped, respectively.
+
+\item
 Scaling symmety is a symmetry $\sigma$ which multiplies $\theta$ pointwise by a vector
 \[
 v=(r_1,...,r_N) = (e^{d_1},...,e^{d_N})
 \]
 where $r_n\in \mathbb{R}_+$ and $d_n=\log r_n$.
 
+\begin{itemize}
+
+\item
 Case of $r_n\in\mathbb{R}_-$ is covered by a combination of scaling symmetry and sign-flip symmetry.
 
-Let $\Sigma(v)$ be the diagonal matrix with $v$ on the diagonal. Then $\sigma(\theta)=\Sigma(v)\theta$.
+\item
+Let $\Sigma_v$ be the diagonal matrix with $v$ on the diagonal. Then $\sigma(\theta)=\Sigma_v\theta$.
 
+\item
 Let matrix $C$ be the matrix of constraints on $d_n$. The scaling symmetries of the model are the vectors in the null space of $C$, $\mathcal{N}(C)$.
 
-Let $d=(d_1,...,d_N)$. Let $v(d) = (e^{d_1},...,e^{d_N})$. Then the scaling symmetries of the model are $\sigma_{d}(\theta)=\Sigma(v(d))\theta$, $d\in\mathcal{N}(C)$.
-
-Then $\{\Sigma(v(d))\theta:d\in\mathcal{N}(C)\}\subset\Theta$ is an equivalence class for the model $(\theta,F)$.
-
-Definition 1?
-
-Let $\Xi$ be a $\sigma$-algebra on $\Theta$. A symmetry breaker $\phi:\Xi\rightarrow\Theta$? is a deterministic function that satisfies
-\begin{enumerate}
+\item
+Let $d=(d_1,...,d_N)$. Let $v_d = (e^{d_1},...,e^{d_N})$. Then the scaling symmetries of the model are $\sigma_{d}(\theta)=\Sigma_{v_d}\theta$, $d\in\mathcal{N}(C)$.
 
 \item
-$\phi(\emptyset)$ is undefined?
+Then $\{\Sigma_{v_d}\theta:d\in\mathcal{N}(C)\}\subset\Theta$ is an equivalence class for the model $(\theta,F)$.
 
 \item
-for $\mathcal{T}\in\Xi$, $\phi(\mathcal{T})=\theta$ where $\theta\in\mathcal{T}$
+The symmetry detector $\Delta_{\mathcal{F}_S}$ for a scaling symmetry is defined as
+\[
+\Delta_{\mathcal{F}_S}(\theta) = \{\Sigma_{v_d}\theta: d\in\mathcal{N}(C)\}
+\]
 
-\end{enumerate}
+\item A symmetry breaker (definition 2) for a scaling symmetry is
+\[
+\phi_{\mathcal{F}_S}([\theta]) =
+\begin{cases}
+\theta & \mathcal{N}(C) = \{\vec{0}\} \\
+\Sigma_{v_d}\theta, \; \|v_d\|=1 & \mathcal{N}(C) \neq \{\vec{0}\}
+\end{cases}
+\]
 
-Definition 2?
+\item
+G\&H 5.3: latent variable $z_i=X_i\beta+\epsilon_i$, $\epsilon_i\sim N(0,\sigma^2)$, scaling of $\beta$ doesn't change sign of $z_i$. Proposed solution is just to fix $\sigma$.
 
-A symmetry breaker $\phi:\Theta\rightarrow\Theta$ is a deterministic measurable function that satisfies
+N'98: same problem as above but now covariance matrix. Proposed solution is just to fix $\Sigma_{1,1}=1$.
 
-\href{https://en.wikipedia.org/wiki/Equivalence_class}{Equivalence class}
-
-- symmetry detection: canonical surjection?
-
-- symmetry breaking: section?
+\end{itemize}
 
 \end{itemize}
 
