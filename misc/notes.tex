@@ -8,6 +8,9 @@
 
 \begin{document}
 
+
+\section{Definitions}
+
 \begin{itemize}
 
 \item
@@ -15,12 +18,120 @@ Symmetry $\sigma:\Theta\rightarrow\Theta$ is a measurable function with a measur
 \[
 \prod_kF_k(\theta)\propto\prod_kF_k\left(\sigma(\theta)\right)
 \]
+where the product is taken over non-prior terms. Symmetries must also fix the components of $\theta$ that correspond to observed variables.
 
 \item
-Local symmetry $\sigma$ satisfies
+Local symmetry is a symmetry $\sigma$ that satisfies
 \[
 F_k(\theta) \propto F_k\left(\sigma(\theta)\right)
 \]
+for all non-prior factors $F_k$.
+
+\end{itemize}
+
+\subsection{Equivalence class}
+
+\begin{itemize}
+
+\item
+A factor graph with equivalence relation $\Xi$, denoted $\mathcal{F}=(\theta,F,\Xi)$, induces a partition of $\Theta$ into equivalence classes $[\cdot]$, with the equivalence relation $\Xi$ that there exists a symmetry between any two members of an equivalence class. $\Xi$ specifies the type of symmetry.
+
+Denote $[\theta]$ to be the equivalence class of $\theta$.
+
+Denote $\Theta/\Xi$ to be the set of all equivalence classes in $\Theta$ w.r.t $\Xi$, called the quotient set of $\Theta$ by $\Xi$.
+
+(TODO: local symmetry?)
+
+\item
+(TODO: Specific to breaking symmetry post-inference?)
+
+A symmetry detector $\Delta_\mathcal{F}:\Theta\rightarrow\Theta/\Xi$ is a measurable function that maps $\theta$ to $[\theta]$ w.r.t. $\Xi$.
+
+\item
+(TODO: Specific to breaking symmetry post-inference?)
+
+A symmetry breaker $\phi_\mathcal{F}:\Theta/\Xi\rightarrow\Theta$ is a measurable function that maps $[\theta]$ to $\theta_0$ w.r.t. $\Xi$ where $\theta_0$ is a representative of $[\theta]$.
+
+\item
+(TODO: Specific to breaking symmetry post-inference?)
+
+An automatic symmetry breaker $\Phi_\mathcal{F}:\Theta\rightarrow\Theta$ is the composition $\Phi_\mathcal{F}=\phi_\mathcal{F}\circ\Delta_\mathcal{F}$ of a symmetry breaker with the corresponding symmetry detector.
+
+(TODO)
+
+An automatic symmetry breaker $\Phi_\mathcal{F}:\Theta\rightarrow\Theta$ is the composition $\Phi_\mathcal{F}=\phi_\mathcal{F}\circ\Delta_\mathcal{F}$ of a symmetry breaker with the corresponding symmetry detector that satisfies the following:
+\begin{enumerate}
+
+\item
+For ASB for two types of symmetries $\Phi_1$, $\Phi_2$, $\Phi_1\circ\Phi_2(\theta)=\Phi_2\circ\Phi_1(\theta)$
+
+\end{enumerate}
+
+Has the following properties:
+\begin{enumerate}
+
+\item
+$\Phi\circ\Phi(\theta) = \Phi(\theta)$
+
+\item
+$\forall \theta_*\in[\theta]$, $\Phi(\theta_*) = \Phi(\theta_0)$ where $\theta_0$ representative of $[\theta]$
+
+\end{enumerate}
+
+\item
+A symmetry broken posterior distribution is a posterior distribution that has the (unnormalized) form
+\[
+\prod_kF_k(\Phi_{\mathcal{F}_M}\circ ... \circ \Phi_{\mathcal{F}_1}(\theta))
+\]
+where $\mathcal{F}_1,...,\mathcal{F}_M$ have equivalence relations $\Xi_1,...,\Xi_M$ corresponding to different types of symmetries equipped, respectively.
+
+\end{itemize}
+
+
+\section{Breaking symmetries post-inference}
+
+\begin{itemize}
+
+\item[Context:]
+Have a posterior distribution $\prod_kF_k(\theta)$ where inference has been performed ($\theta$ has/can be identified)
+
+\item[Problem:]
+Nonidentifiability. There exists a (local) symmetry $\sigma$ s.t. $\prod_kF_k(\theta) \propto \prod_kF_k(\sigma(\theta))$ or for local, $F_k(\theta)\propto F_k(\sigma(\theta))$
+
+\item[When:]
+Inference algorithm performance is not an issue in the presence of a symmetry.
+
+\item[Solution:]
+Use the symmetry broken posterior distribution
+
+\end{itemize}
+
+
+\subsection{Scaling symmetries}
+
+Scaling symmety is a symmetry $\sigma$ which multiplies $\theta$ pointwise by a vector
+\[
+v=(r_1,...,r_N) = (e^{d_1},...,e^{d_N})
+\]
+where $r_n\in \mathbb{R}_+$ and $d_n=\log r_n$.
+
+\begin{itemize}
+
+\item
+Let $\Sigma_v$ be the diagonal matrix with $v$ on the diagonal. Then $\sigma(\theta)=\Sigma_v\theta$.
+
+\item
+Let $d=(d_1,...,d_N)$. Let $v_d = (e^{d_1},...,e^{d_N})$. Then the scaling symmetries of the model are $\sigma_{d}(\theta)=\Sigma_{v_d}\theta$, $d\in\mathcal{N}(C)$.
+
+\item
+Then $\{\Sigma_{v_d}\theta:d\in\mathcal{N}(C)\}\subset\Theta$ is an equivalence class for the model $(\theta,F)$.
+
+\end{itemize}
+
+
+\section{Notes}
+
+\begin{itemize}
 
 \item
 Class of transformations of model parameters $T\subset\{f:\Theta\rightarrow\Theta\}$. Subset of local symmetries contained in $T$ $S_T\subset T$ defined by
@@ -42,6 +153,8 @@ Denote $\Theta/\Xi$ to be the set of all equivalence classes in $\Theta$ w.r.t $
 \item
 A symmetry detector $\Delta_\mathcal{F}:\Theta\rightarrow\Theta/\Xi$ is a measurable? function that maps $\theta$ to $[\theta]$ w.r.t. $\Xi$.
 
+Symmetry detection is identifying the equivalence class?
+
 \item
 Definition 1: A symmetry breaker $\phi_\mathcal{F}:\Theta/\Xi\rightarrow\Theta$ is a measurable function that maps $[\theta]$ to $\theta_0$ w.r.t. $\Xi$ where $\theta_0$ is a representative of $[\theta]$.
 
@@ -55,6 +168,8 @@ A symmetry broken posterior distribution is a posterior distribution that has th
 \prod_kF_k(\Phi_{\mathcal{F}_M}\circ ... \circ \Phi_{\mathcal{F}_1}(\theta))
 \]
 where $\mathcal{F}_1,...,\mathcal{F}_M$ have equivalence relations $\Xi_1,...,\Xi_M$ corresponding to different types of symmetries equipped, respectively.
+
+$\Phi$ is not a symmetry (no measurable inverse)
 
 \item
 Scaling symmety is a symmetry $\sigma$ which multiplies $\theta$ pointwise by a vector
@@ -86,7 +201,7 @@ The symmetry detector $\Delta_{\mathcal{F}_S}$ for a scaling symmetry is defined
 \Delta_{\mathcal{F}_S}(\theta) = \{\Sigma_{v_d}\theta: d\in\mathcal{N}(C)\}
 \]
 
-\item A symmetry breaker (definition 2) for a scaling symmetry is
+\item A symmetry breaker (definition ) for a scaling symmetry is
 \[
 \phi_{\mathcal{F}_S}([\theta]) =
 \begin{cases}
@@ -96,8 +211,28 @@ The symmetry detector $\Delta_{\mathcal{F}_S}$ for a scaling symmetry is defined
 \]
 
 \item
+A symmetry breaker (definition 1) for a scaling symmetry is
+\[
+\phi_{\mathcal{F}_S}([\theta]) = \Sigma_d\theta
+\]
+
+Let $\theta_* = \Sigma_{d^*}\theta$ for some $d^*\in\mathcal{N}(C)$.
+
+Then
+\begin{align*}
+\Delta_\Xi(\theta_*) &= \{\Sigma_d\theta_*:d\in\mathcal{N}(C)\} \\
+&= \{\Sigma_d\Sigma_{d^*}\theta:d\in\mathcal{N}(C)\} \\
+&= \{\Sigma_{d+d^*}\theta:d\in\mathcal{N}(C)\} \\
+&= \{\Sigma_d\theta:d\in\mathcal{N}(C)\}
+\end{align*}
+where the above follows as $d+d^*\in\mathcal{N}(C)$. Hence $\Delta_\Xi$ maps members of an equivalence class to the equivalence class.
+
+Symmetry breaker: need to constrain $d\in\mathcal{N}(C)$ to get a unique representative? How to remove dependence on $\theta$?
+
+\item
 G\&H 5.3: latent variable $z_i=X_i\beta+\epsilon_i$, $\epsilon_i\sim N(0,\sigma^2)$, scaling of $\beta$ doesn't change sign of $z_i$. Proposed solution is just to fix $\sigma$.
 
+\item
 N'98: same problem as above but now covariance matrix. Proposed solution is just to fix $\Sigma_{1,1}=1$.
 
 \end{itemize}
