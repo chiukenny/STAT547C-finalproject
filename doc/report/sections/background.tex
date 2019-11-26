@@ -4,6 +4,43 @@
 
 \section{Background}
 
+[TODO context]
 
+We represent probabilistic models using factor graphs $(\theta,F)$ of variables $\theta=(\theta_1,...,\theta_N)$ and factors $F=(F_1,...,F_k)$. Let $\Theta$ denote the space of variable values. $\theta\in\Theta$ contains all parameters, latent variables, and observations (which are fixed). $F$ represents all functions, operations, constraints, priors and likelihoods that the posterior distribution may factorize into. Given data, the unnormalized posterior distribution can then be expressed as
+\[
+\prod_kF_k(\theta)
+\]
+where factor $F_k$ may not necessarily depend on all of $\theta$. In the context of symmetries, priors are not of interest as it is assumed that the fixed parameters of the prior are chosen by the user. The remainder of this report will refer to non-prior factors when considering $F_k$.
+
+A symmetry $\sigma:\Theta\rightarrow\Theta$ is a measurable function with a measurable inverse that satisfies
+\[
+\prod_kF_k(\theta) \propto \prod_kF_k(\sigma(\theta))
+\]
+and where if $\theta_i$ is some observed variable, then the symmetry keeps $\theta_i$ fixed. In other words, a symmetry is a transformation on the variables that preserves the product likelihood up to a scaling constant.
+
+A local symmetry is a symmetry $\sigma$ that satisfies
+\[
+F_k(\theta) \propto F_k\left(\sigma(\theta)\right)
+\]
+for all non-prior factors $F_k$. In contrast to a symmetry, a local symmetry is a transformation on the variables that preserves the likelihood at each factor up to a scaling constant.
+
+\subsection{Equivalence class}
+
+Let $A$ be a set. For all $a,b,c\in A$, an equivalence relation $\Xi$ on $A$ is a binary relation that satisfies the following three properties:
+\begin{enumerate}
+
+\item
+\textbf{reflexivity}: $a\Xequiv a$
+
+\item
+\textbf{symmetry}: if $a\Xequiv b$ then $b\Xequiv a$
+
+\item
+\textbf{transitivity}: if $a\Xequiv b$ and $b\Xequiv c$ then $a\Xequiv c$
+
+\end{enumerate}
+An equivalence relation $\Xi$ partitions $A$ into sets called equivalence classes. For $a,b\in A$, if $a\Xequiv b$ then $a$ and $b$ belong to the same equivalence class. We denote the equivalence class of $a$ as $[a]$. The set of all equivalence classes in $A$ with respect to $\Xi$ is called the quotient set of $A$ by $\Xi$, denoted $A/\Xi$.
+
+A section is a function $f:A/\Xi\rightarrow A$ that maps an equivalence class to one of its members. The member $f([a])$ is called the representative of $[a]$ with respect to $f$.
 
 % ...

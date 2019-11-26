@@ -276,3 +276,6 @@ TSWLatexianTemp*
 
 # DS_store
 *.DS_store
+
+# Visual Studio
+*/.vs/*

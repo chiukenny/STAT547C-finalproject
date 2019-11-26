@@ -14,6 +14,16 @@
 \begin{itemize}
 
 \item
+We represent probabilistic models using factor graphs, denoted $(\theta,F)$ of variables $\theta=(\theta_1,...,\theta_N)$ and factors $F=(F_1,...,F_k)$.
+
+$\Theta$ denotes the space of variable values. $\theta\in\Theta$ contains all parameters, latent variables, and observations (which are fixed).
+
+$F$ represents all functions, operations, and constraints that the posterior distribution factorizes into from a Bayesian perspective including priors and likelihoods (in directed graphs). Given data, the unnormalized posterior distribution can then be expressed as
+\[
+\prod_kF_k(\theta)
+\]
+
+\item
 Symmetry $\sigma:\Theta\rightarrow\Theta$ is a measurable function with a measurable inverse satisfying
 \[
 \prod_kF_k(\theta)\propto\prod_kF_k\left(\sigma(\theta)\right)

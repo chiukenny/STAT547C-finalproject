@@ -31,3 +31,7 @@ This project log is used to record the progress of this project.
 
 * Adjusted formulation of "automatic symmetry breaker". Should have or satisfy certain properties if it breaks a symmetry.
 * Question: in what cases would applying a transformation to the parameters be identical pre- and post-inference?
+
+### 2019-11-25
+
+* Started writing definitions in Background section
