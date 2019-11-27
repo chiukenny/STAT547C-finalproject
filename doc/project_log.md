@@ -35,3 +35,8 @@ This project log is used to record the progress of this project.
 ### 2019-11-25
 
 * Started writing definitions in Background section
+
+### 2019-11-26
+
+* Started writing new definitions in body
+* Thought of reparameterization as adding factors with constraints to remove symmetries. Can this be done without changing the likelihood?

@@ -1,0 +1,68 @@
+% !TEX root = ../main.tex
+
+% Body 1 section
+
+\section{Formulation based on equivalence classes}
+
+Let $(\theta,F)$ be a factor graph. Let $\Xi$ be an equivalence relation such that for $\theta,\theta_*\in\Theta$, we have $\theta\Xequiv\theta_*$ if and only if there exists a local symmetry $\sigma$ such that $\sigma(\theta)=\theta_*$.
+
+We show that $\Xi$ is a proper equivalence relation. Consider $\theta_1, \theta_2, \theta_3\in\Theta$.
+\begin{enumerate}
+
+\item
+\textbf{reflexivity}: let $\sigma$ be the identity map. Then trivially, $F_k(\theta_1) = F_k(\sigma(\theta_1))$.
+
+\item
+\textbf{symmetry}: suppose $\theta_1\Xequiv\theta_2$. Then there exists some symmetry $\sigma$ such that $\sigma(\theta_1)=\theta_2$ and $F_k(\theta_1) \propto F_k(\theta_2)$. By definition of symmety, $\sigma^{-1}$ exists and $\sigma^{-1}(\theta_2)=\theta_1$. Then
+\[
+F_k(\theta_2) \propto F_k(\theta_1) = F_k(\sigma^{-1}(\theta_2))
+\]
+and hence $\theta_2\Xequiv\theta_1$.
+
+\item
+\textbf{transitivity}: suppose $\theta_1\Xequiv\theta_2$ and $\theta_2\Xequiv\theta_3$. Then there exists symmetries $\sigma_1$, $\sigma_2$ such that
+\begin{align*}
+\sigma_1(\theta_1)&=\theta_2 & F_k(\theta_1)&\propto F_k(\theta_2) \\
+\sigma_2(\theta_2)&=\theta_3 & F_k(\theta_2)&\propto F_k(\theta_3)
+\end{align*}
+Then $\sigma_2(\sigma_1(\theta_1)) = \theta_3$ and
+\[
+F_k(\theta_1) \propto F_k(\theta_2) \propto F_k(\theta_3) = F_k(\sigma_2(\sigma_1(\theta_1)))
+\]
+and hence $\theta_1\Xequiv\theta_3$.
+
+\end{enumerate}
+
+Notice that $\Xi$ is dependent on the factor graph $(\theta,F)$. It is mathematically more convenient to consider factor graphs equipped with a $\Xi$ that corresponds to a specific type of symmetry. We denote this as $\mathcal{F}=(\theta,F,\Xi)$.
+
+We now have all the definitions needed to formulate symmetry detection and symmetry breaking in terms of equivalence classes.
+\begin{itemize}
+
+\item
+A symmetry detector $\Delta_\mathcal{F}:\Theta\rightarrow\Theta/\Xi$ is a measurable function that maps $\theta$ to $[\theta]$ with respect to $\Xi$.
+
+\item
+A symmetry breaker $\phi_\mathcal{F}:\Theta/\Xi\rightarrow\Theta$ is a section that maps $[\theta]$ to a representative $\theta_*\in[\theta]$.
+
+\item
+An automatic symmetry breaker $\phi_\mathcal{F}\circ\Delta_\mathcal{F}=\Phi_\mathcal{F}:\Theta\rightarrow\Theta$ is the composition of a symmetry breaker and its corresponding symmetry detector. It maps $\theta$ to a representative $\theta_*$ of its equivalence class.
+
+\end{itemize}
+
+The dependence of $\Delta$, $\phi$, and $\Phi$ on a factor graph $\mathcal{F}$ is made clear by its subscript. When considering two functions of the same type, e.g. $\Phi_{\mathcal{F}_1}$ and $\Phi_{\mathcal{F}_2}$, we will view them as being defined on the same factor graph $(\theta,F)$ but with $\Xi_1,$ and $\Xi_2$ corresponding to different types of symmetries.
+
+This formulation is most useful in the case where the main concern is the nonidentifiability of the parameters in the presence of symmetries. If inference has been made on a posterior distribution but the question remains whether the inferred value is the "correct" one, it may instead be more interpretable to work with the symmetry broken posterior distribution
+\[
+\prod_kF_k(\Phi_{\mathcal{F}_M}\circ ...\circ\Phi_{\mathcal{F}_1}(\theta))
+\]
+where $\Phi_{\mathcal{F}_1},...,\Phi_{\mathcal{F}_M}$ correspond to $M$ different types of symmetries that are to be broken. The corresponding $\phi_{\mathcal{F}_1},...,\phi_{\mathcal{F}_M}$ are chosen to select representatives from the respective equivalence classes based on some desired criteria.
+
+We show an example to demonstrate this idea.
+
+
+\subsection{Scaling symmetries}
+
+A scaling symmetry \cite{Nishihara:2013}
+
+
+% ...
