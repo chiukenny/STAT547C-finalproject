@@ -1,0 +1,17 @@
+% !TEX root = ../main.tex
+
+% Body 2 section
+
+\section{Formulation based on reparameterization}
+
+The formulation based on equivalence classes is useful when the main concern of having symmetries is parameter nonidentifiability. In this case, it is assumed that the inference algorithm is able to run without issues and that the symmetries can be broken post-inference. However, there may also be cases where the presence of symmetries impact the performance of the inference algorithm. For example, sampling algorithms may converge at a slower rate when variables are strongly correlated due to the existence of a symmetry. In this situation, the symmetry should be broken before running inference. We present a formulation of symmetry breaking based on reparameterizing the model. The formulation directly builds on the symmetry detection approaches proposed in Nishihara et al. by changing the factor graph in such a way that the approaches detect no symmetries.
+
+
+\subsection{Scaling symmetries}
+
+Nishihara et al. discussed an approach for detecting scaling symmetries by constructing and finding the null space to the constraint matrix $\mathcal{C}$. In other words, a scaling symmetry is present if the constraint matrix is underdetermined. We look to change the factor graph such that the constraint matrix becomes a determined system. This can be done from two perspectives: by merging factors to reduce the number of variables or by adding factors to impose additional constraints.
+
+Merging 
+
+
+% ...

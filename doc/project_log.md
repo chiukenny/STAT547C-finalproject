@@ -40,3 +40,12 @@ This project log is used to record the progress of this project.
 
 * Started writing new definitions in body
 * Thought of reparameterization as adding factors with constraints to remove symmetries. Can this be done without changing the likelihood?
+
+### 2019-11-27
+
+* Added example of a detector for scaling symmetries
+
+### 2019-12-04
+
+* Added background and equivalence class formulation for permutation symmetries
+* Started writing formulation based on reparameterization section in body

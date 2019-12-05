@@ -6,17 +6,19 @@
 
 [TODO context]
 
-We represent probabilistic models using factor graphs $(\theta,F)$ of variables $\theta=(\theta_1,...,\theta_N)$ and factors $F=(F_1,...,F_k)$. Let $\Theta$ denote the space of variable values. $\theta\in\Theta$ contains all parameters, latent variables, and observations (which are fixed). $F$ represents all functions, operations, constraints, priors and likelihoods that the posterior distribution may factorize into. Given data, the unnormalized posterior distribution can then be expressed as
+\cite{Nishihara:2013}
+
+We represent probabilistic models using factor graphs $(\theta,F)$ of variables $\theta=(\theta_1,...,\theta_N)$ and factors $F=(F_1,...,F_K)$. Let $\Theta$ denote the space of variable values. $\theta\in\Theta$ contains all parameters, latent variables, and observations (which are fixed). $F$ represents all functions, operations, constraints, priors and likelihoods that the posterior distribution may factorize into. Given data, the unnormalized posterior distribution can then be expressed as
 \[
 \prod_kF_k(\theta)
 \]
-where factor $F_k$ may not necessarily depend on all of $\theta$. In the context of symmetries, priors are not of interest as it is assumed that the fixed parameters of the prior are chosen by the user. The remainder of this report will refer to non-prior factors when considering $F_k$.
+where factor $F_k$ may not necessarily depend on all of $\theta$. In the context of symmetries, priors are not of interest as it is assumed that the parameters of the prior are chosen by the user. The remainder of this report will refer to non-prior factors when considering $F_k$.
 
 A symmetry $\sigma:\Theta\rightarrow\Theta$ is a measurable function with a measurable inverse that satisfies
 \[
 \prod_kF_k(\theta) \propto \prod_kF_k(\sigma(\theta))
 \]
-and where if $\theta_i$ is some observed variable, then the symmetry keeps $\theta_i$ fixed. In other words, a symmetry is a transformation on the variables that preserves the product likelihood up to a scaling constant.
+and where if $\theta_n$ is some observed variable, then the symmetry keeps $\theta_n$ fixed. In other words, a symmetry is a transformation on the variables that preserves the product likelihood up to a scaling constant.
 
 A local symmetry is a symmetry $\sigma$ that satisfies
 \[
@@ -24,7 +26,51 @@ F_k(\theta) \propto F_k\left(\sigma(\theta)\right)
 \]
 for all non-prior factors $F_k$. In contrast to a symmetry, a local symmetry is a transformation on the variables that preserves the likelihood at each factor up to a scaling constant.
 
+The work by Nishihara et al. discusses several types of symmetries and how they can be detected for a given factor graph. Their work is presented in the context of probabilistic programming, where it is assumed that all built-in factors have been annotated with constraints and/or labels that correspond to specific types of symmetries. In this report, we will assume that these annotations are intrinsic properties of the factors $F_k$ and hence are known for a given factor graph. The following subsections provide examples of such annotations and how they are used to detect specific types of symmetries.
+
+
+\subsection{Scaling symmetries} \label{sec:scaling}
+
+A scaling symmetry is a local symmetry $\sigma$ such that
+\[
+\sigma: (\theta_1,...,\theta_N) \longmapsto (r_1\theta_1,...,r_N\theta_N) = (e^{d_1}\theta_1,...,e^{d_N}\theta_N)
+\]
+where $r_n\in\mathbb{R}_+$ and $d_n=\log r_n$. Examples of the constraints that factors impose on the scaling of the variables are provided in Table \ref{tab:scaling}. For example, a factor that sums inputs $a+b=c$ preserves its integrity under scaling only if both $a$, $b$, and $c$ are scaled by the same amount. This is enforced by the constraint $d_a=d_b=d_c$ that it imposes.
+
+\begin{table}[b]
+\centering
+\begin{tabular}{|c|c|}
+\hline
+factor & constraints \\
+\hline
+$c=a+b$ & $d_a = d_b = d_c$ \\
+$c = a\times b$ & $d_c= d_a + d_b$ \\
+$x\geq0$ & none \\
+\hline
+\end{tabular}
+\caption{Example factors and the constraints they impose on potential scaling symmetries.}
+\label{tab:scaling}
+\end{table}
+
+Let $d=(d_1,...,d_N)$. Consider the matrix $\mathcal{C}$ constructed by stacking all the constraints in a given factor graph. For example, the sum factor above adds the rows $d_a-d_c=0$ and $d_b-d_c=0$ to $\mathcal{C}$. The null space $\mathcal{N}(\mathcal{C})$ then describes the space of $d$ that satisfies all the constraints. The scaling symmetries of the factor graph can then be described by the set $\{\sigma_d:d\in\mathcal{N}(\mathcal{C})\}$.
+
+
+\subsection{Permutation symmetries} \label{sec:permutation}
+
+A permutation symmetry is a (non-local) symmetry $\sigma$ that permutes the components of $\theta$. Such a symmetry may be present in models that have mixture components or latent features, and is commonly characterized by the label-switching problem.
+
+Nishihara et al. describe an approach to detect permutation symmetries that have the property
+\[
+\prod_{\text{label}(k)=c}F_k(\sigma(\theta)) = \prod_{\text{label}(k)=c}F_k(\theta)
+\]
+for all factor labels $c$. To do so, the factors have to be labeled with their type and their arguments (edges) must also be labeled such that two arguments share the same label if and only if the factor is symmetric with respect to those two arguments. For example, the sum factor $c=a+b$ would be labeled as a binary sum factor and the arguments $a$ and $b$ would share the same label. Given the labels, Nishihara et al. then reduces the problem to a graph automorphism problem where the permutation symmetries of the factor graph are the automorphisms that preserve the factor and edge labels. While detecting the existence of graph automorphisms is not known to be solvable in polynomial time, most graphs can be tested in linear time.
+
+Nishihara et al. also note that this approach is dependent on how the factor graph is structured. For example, the approach will identify the symmetry across $a$, $b$ and $c$ in the ternary sum factor $a+b+c$ but will only identify the symmetry for $a$, $b$ and for $a+b$, $c$ in the layered binary sum factors $(a+b)+c$.
+
+
 \subsection{Equivalence class}
+
+One formulation of symmetry detection and breaking that we present in this report will be based on the concept of equivalence classes. We include a brief review of equivalence classes in this section.
 
 Let $A$ be a set. For all $a,b,c\in A$, an equivalence relation $\Xi$ on $A$ is a binary relation that satisfies the following three properties:
 \begin{enumerate}
