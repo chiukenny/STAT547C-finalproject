@@ -4,9 +4,16 @@
 
 \section{Formulation based on equivalence classes}
 
-Let $(\theta,F)$ be a factor graph. Let $\Xi$ be an equivalence relation such that for $\theta,\theta_*\in\Theta$, we have $\theta\Xequiv\theta^*$ if and only if there exists a local symmetry $\sigma$ such that $\sigma(\theta)=\theta^*$.
+Our first approach to automatic symmetry detection and breaking uses a formulation based on equivalence classes. Symmetry detection can be framed as a problem of finding the set of parameters that are symmetric (an equivalence class) for a given factor graph. Similarly, symmetry breaking can be framed as choosing a single member (representative) from the set of parameters based on some desired criteria. We formalize these ideas mathematically.
 
-We show that $\Xi$ is a proper equivalence relation. Consider $\theta_1, \theta_2, \theta_3\in\Theta$.
+\begin{defn}
+Consider a factor graph $(\theta,F)$. Define $\Xi$ to be the equivalence relation such that for $\theta,\theta_*\in\Theta$, we have $\theta\Xequiv\theta^*$ if and only if there exists a local symmetry $\sigma$ such that $\sigma(\theta)=\theta^*$.
+\end{defn}
+
+\noindent We show that $\Xi$ is a proper equivalence relation.
+
+\begin{proof}
+Consider $\theta_1, \theta_2, \theta_3\in\Theta$.
 \begin{enumerate}
 
 \item
@@ -36,48 +43,55 @@ F_k(\theta_1) \propto F_k(\theta_2) \propto F_k(\theta_3) = F_k(\sigma_3(\theta_
 and hence $\theta_1\Xequiv\theta_3$.
 
 \end{enumerate}
+\end{proof}
 
-Notice that $\Xi$ is only describable in the context of a given factor graph $(\theta,F)$. It is therefore mathematically more convenient to consider factor graphs equipped with a $\Xi$ that corresponds to a specific type of symmetry. We denote this as $\mathcal{F}=(\theta,F,\Xi)$. The constraint matrix $\mathcal{C}$ of $\mathcal{F}$ described in Section \ref{sec:scaling} is constructed from the constraints specified by $\Xi$ on each factor $F_k$.
+Notice that $\Xi$ can only be defined in the context of a given factor graph $(\theta,F)$. It is therefore mathematically more convenient to consider factor graphs equipped with a $\Xi$ that corresponds to a specific type of symmetry. We denote this as $\mathcal{F}=(\theta,F,\Xi)$. The constraint matrix $\mathcal{C}$ of $\mathcal{F}$ described in Section \ref{sec:scaling} is constructed from the constraints specified by $\Xi$ on each factor $F_k$.
 
-We now have all the definitions needed to formulate symmetry detection and symmetry breaking in terms of equivalence classes.
-\begin{itemize}
+We now formally define symmetry detection and symmetry breaking in terms of equivalence classes.
 
-\item
-A symmetry detector $\Delta_\mathcal{F}:\Theta\rightarrow\Theta/\Xi$ is a measurable function that maps $\theta$ to $[\theta]$ with respect to $\Xi$.
+\begin{defn}
+A \textit{symmetry detector} $\Delta_\mathcal{F}:\Theta\rightarrow\Theta/\Xi$ is a measurable function that maps $\theta$ to $[\theta]$ with respect to $\Xi$.
+\end{defn}
 
-\item
-A symmetry breaker $\phi_\mathcal{F}:\Theta/\Xi\rightarrow\Theta$ is a measurable section that maps $[\theta]$ to a representative $\theta_*\in[\theta]$.
+\begin{defn}
+A \textit{symmetry breaker} $\phi_\mathcal{F}:\Theta/\Xi\rightarrow\Theta$ is a measurable section that maps $[\theta]$ to a representative $\theta^*\in[\theta]$.
+\end{defn}
 
-\item
-An automatic symmetry breaker $\phi_\mathcal{F}\circ\Delta_\mathcal{F}=\Phi_\mathcal{F}:\Theta\rightarrow\Theta$ is the composition of a symmetry breaker and its corresponding symmetry detector. It maps $\theta$ to a representative $\theta_*$ of its equivalence class.
+\begin{defn}
+An \textit{automatic symmetry breaker} $\Phi_\mathcal{F}=\phi_\mathcal{F}\circ\Delta_\mathcal{F}:\Theta\rightarrow\Theta$ is the composition of a symmetry breaker and its corresponding symmetry detector. It maps $\theta$ to a representative $\theta^*$ of its equivalence class.
+\end{defn}
 
-\end{itemize}
+The dependence of $\Delta$, $\phi$, and $\Phi$ on the factor graph $\mathcal{F}$ is made clear by the subscript. When considering two functions of the same type, e.g. $\Phi_{\mathcal{F}_1}$ and $\Phi_{\mathcal{F}_2}$, we will view them as being defined on the same factor graph $(\theta,F)$ but with $\Xi_1$ and $\Xi_2$ corresponding to different types of symmetries.
 
-The dependence of $\Delta$, $\phi$, and $\Phi$ on a factor graph $\mathcal{F}$ is made clear by the subscript. When considering two functions of the same type, e.g. $\Phi_{\mathcal{F}_1}$ and $\Phi_{\mathcal{F}_2}$, we will view them as being defined on the same factor graph $(\theta,F)$ but with $\Xi_1,$ and $\Xi_2$ corresponding to different types of symmetries.
-
-This formulation is most useful in the case where the main concern is the nonidentifiability of the parameters in the presence of symmetries. If inference has been made on a posterior distribution but the question remains whether the inferred value is the ``correct" one, it may instead be more interpretable to work with the symmetry broken posterior distribution
+This formulation is most useful in the case where the main concern is parameter nonidentifiability in the presence of symmetries. If inference has been made on a posterior distribution but the question remains whether the inferred value is the ``correct" one, it may instead be more interpretable to work with the symmetry-broken posterior distribution
 \[
 \prod_kF_k(\Phi_{\mathcal{F}_M}\circ ...\circ\Phi_{\mathcal{F}_1}(\theta))
 \]
 where $\Phi_{\mathcal{F}_1},...,\Phi_{\mathcal{F}_M}$ correspond to $M$ different types of symmetries that are to be broken. The corresponding $\phi_{\mathcal{F}_1},...,\phi_{\mathcal{F}_M}$ are chosen to select representatives from the respective equivalence classes based on some desired criteria.
 
-We show an example to demonstrate this idea.
+The following two subsections show examples of how this equivalence class formulation is used in the context of scaling symmetries and permutation symmetries.
 
 
 \subsection{Scaling symmetries}
 
-We describe the scaling symmetries in Section \ref{sec:scaling} under the formulation based on equivalence classes. Let $\Sigma_d$ be the diagonal matrix with $(e^{d_1},...,e^{d_N})$ on the diagonal. Then a scaling symmetry $\sigma_d$ can be written as
+We describe the scaling symmetries in Section \ref{sec:scaling} under the formulation based on equivalence classes.
+
+\begin{defn}
+Let $\Sigma_d$ be the diagonal matrix with $(e^{d_1},...,e^{d_N})$ on the diagonal. A scaling symmetry $\sigma_d$ can be written as
 \[
 \sigma_d(\theta)=\Sigma_d\theta
 \]
-
-We define the scaling symmetry detector as
+where the right-hand side is taken as a matrix-vector product. The matrix $\Sigma_d$ is positive definite and so the inverse exists as required by the definition of symmetry. We then define the \textit{scaling symmetry detector} to be
 \[
 \Delta_\mathcal{F}(\theta) = \{\Sigma_d\theta:d\in\mathcal{N}(\mathcal{C})\}=[\theta]
 \]
-where $\mathcal{C}$ is the constraint matrix of $\mathcal{F}$. We show that this detector correctly maps the variables $\theta$ to their equivalence classes $[\theta]$ induced by $\Xi$. That is, the detector maps two variables $\theta$, $\theta^*\in\Theta$ to the same equivalence class if and only if there exists a scaling symmetry $\sigma$ such that $\sigma(\theta)=\theta^*$.
+where $\mathcal{C}$ is the constraint matrix of $\mathcal{F}$.
+\end{defn}
 
-Suppose that $\theta^*=\Sigma_{d^*}\theta$ for some $d^*\in\mathcal{N}(\mathcal{C})$. Then
+\noindent We show that this detector correctly maps the variables $\theta$ to their equivalence classes $[\theta]$ with respect to $\Xi$. That is, the detector maps two variables $\theta$, $\theta^*\in\Theta$ to the same equivalence class if and only if there exists a scaling symmetry $\sigma_d$ such that $\sigma_d(\theta)=\theta^*$.
+
+\begin{proof}
+\textit{Sufficiency}: Suppose that $\theta^*=\Sigma_{d^*}\theta$ for some $d^*\in\mathcal{N}(\mathcal{C})$. Then
 \begin{align*}
 \Delta_\mathcal{F}(\theta^*) &= \{\Sigma_d\theta^*:d\in\mathcal{N}(\mathcal{C})\} \\
 &= \{\Sigma_d\Sigma_{d^*}\theta:d\in\mathcal{N}(\mathcal{C})\} \\
@@ -86,15 +100,18 @@ Suppose that $\theta^*=\Sigma_{d^*}\theta$ for some $d^*\in\mathcal{N}(\mathcal{
 &= \Delta_\mathcal{F}(\theta)
 \end{align*}
 where the above follows because $\Sigma_d$ and $\Sigma_{d^*}$ are diagonal and $d+d^*\in\mathcal{N}(\mathcal{C})$.
+\\
 
-We show the converse by the contrapositive. Suppose that $\theta^*\neq\Sigma_{d}\theta$ for all $d\in\mathcal{N}(\mathcal{C})$. Then $\theta^*\notin\Delta_\mathcal{F}(\theta)$ by definition. Also, by definition of equivalence class, $\theta^*\in[\theta^*]=\Delta_\mathcal{F}(\theta^*)$. Hence $\Delta_\mathcal{F}(\theta)\neq\Delta_\mathcal{F}(\theta^*)$ and so the detector maps $\theta$, $\theta^*$ to different equivalence classes.
+\noindent \textit{Necessity}: We show this by the contrapositive. Suppose that $\theta^*\neq\Sigma_{d}\theta$ for all $d\in\mathcal{N}(\mathcal{C})$. Then $\theta^*\notin\Delta_\mathcal{F}(\theta)$ by definition of the symmetry detector. Also, by definition of equivalence class, $\theta^*\in[\theta^*]=\Delta_\mathcal{F}(\theta^*)$. Hence $\Delta_\mathcal{F}(\theta)\neq\Delta_\mathcal{F}(\theta^*)$ and so the detector maps $\theta$, $\theta^*$ to different equivalence classes.
+\end{proof}
 
-A scaling symmetry breaker $\phi_\mathcal{F}$ is more difficult to formalize for two reasons. The first reason is that the equivalence class is described by using the input $\theta$ as a reference point. If $[\theta_1]$ and $[\theta_2]$ describe the same equivalence class, the breaker must be able to map both to the representative $\theta^*$. The second reason is that the equivalence class is nonlinear in the space of diagonal matrices $\Sigma_d$ (it is described by the linear space $\mathcal{N}(\mathcal{C})$). This means that for a given $\theta$, operations such as scaling may not return a member of the same equivalence class. These two reasons make it challenging to correctly identify the representative for the given equivalence class. An example of a possible breaker worth exploring is the one that returns the minimum norm, i.e.,
+It is more difficult to provide a concrete example of a \textit{scaling symmetry breaker} $\phi_\mathcal{F}$ for two reasons. The first reason is that the equivalence class is described by using the input $\theta$ as a reference point. If $[\theta_1]$ and $[\theta_2]$ describe the same equivalence class, the breaker must be able to map both to the representative $\theta^*$. The second reason is that the equivalence class is nonlinear in the space of diagonal matrices $\Sigma_d$ (it is described by the linear space $\mathcal{N}(\mathcal{C})$ rather). This means that for a given $\theta$, operations such as scaling may not return a member of the same equivalence class. These two reasons make it challenging to mathematically define a scaling symmetry breaker that correctly extracts the representative for a given equivalence class. An example of a possible breaker worth exploring is the one that returns the minimum norm, i.e.,
 \[
 \phi_\mathcal{F}([\theta]) = \underset{\theta\in[\theta]}{\arg\min}\;\|\theta\|
 \]
-However, consideration will need to be given in how to deal with multiple members having the same minimum norm and also in how this could be solved computationally for an uncountable $[\theta]$.
+However, this mathematically convenient notation hides the question of how to computationally solve for the minimum norm when $[\theta]$ may be an uncountable nonlinear space. Consideration will also need to be given in how to deal with multiple members having the same norm.
 
+\iffalse
 Under the assumption that the representative $\theta^*$ is known for all descriptions $[\cdot]$ of any equivalence class in $\Theta/\Xi$, it is straightforward to transform any $\theta$ to the representative of its class. Note that
 \[
 \theta = \Sigma_{d^*}\theta^*
@@ -103,30 +120,49 @@ for some $d^*\in\mathcal{N}(\mathcal{C})$. Then because $\Sigma_{d^*}$ is positi
 \[
 \Sigma_{d^*}^{-1}\theta = \theta^*
 \]
+\fi
 
 
 \subsection{Permutation symmetries}
 
-While not a local symmetry, the permutation symmetry discussed in Section \ref{sec:permutation} can also be formulated in terms of equivalence classes. In this case, the definition of $\Xi$ is modified to consider the existence of a non-local symmetry between two members of an equivalence class. Let $\Pi$ be a permutation matrix (a matrix where rows of the identity matrix are permuted). Then a permutation symmetry $\sigma$ can be written as
+While not a local symmetry, the permutation symmetry discussed in Section \ref{sec:permutation} can also be described in terms of equivalence classes. In this case, the definition of $\Xi$ is modified to consider the existence of a non-local symmetry between two members of an equivalence class. 
+
+\begin{defn}
+Let $\Pi$ be a permutation matrix (a matrix where rows of the identity matrix are permuted). A permutation symmetry $\sigma$ can be written as
 \[
 \sigma(\theta)=\Pi\theta
 \]
-We say that $\Pi\in\mathcal{F}$ if the rows that correspond to non-permutable variables have 1 on the diagonal. The permutation symmetry detector can then be defined as
+where again the right-hand side is taken to be a matrix-vector product. Permutation matrices are orthogonal and so the inverse exists and is given by $\Pi^T$. We say that $\Pi\in\mathcal{F}$ if the rows that correspond to non-permutable variables have 1 on the diagonal. The \textit{permutation symmetry detector} is then defined to be
 \[
 \Delta_\mathcal{F}(\theta) = \left\{\Pi\theta:\Pi\in\mathcal{F}\right\} = [\theta]
 \]
-Note that if $\Pi,\Pi^*\in\mathcal{F}$, then the matrix product $\Pi\Pi^*$ is itself a permutation matrix by properties of permutation matrices. Furthermore, $\Pi\Pi^*\in\mathcal{F}$ as both matrices have 1 on the diagonal for non-permutable rows and thus so does the product.
+Under this definition, it is assumed that there are no restrictions on the permutations of the permutable variables. If variables are permutable with only certain others, multiple permutation symmetry detectors are needed where each detects the symmetries in a subset of permutable variables.
+\end{defn}
 
-This fact directly shows that $\Delta_\mathcal{F}(\theta)=\Delta_\mathcal{F}(\theta^*)$ if there exists a permutation symmetry $\sigma$ such that $\sigma(\theta)=\Pi^*\theta=\theta^*$, $\Pi^*\in\mathcal{F}$, as
+Notice that if $\Pi,\Pi^*\in\mathcal{F}$, then the matrix product $\Pi\Pi^*$ is itself a permutation matrix by properties of permutation matrices. Furthermore, $\Pi\Pi^*\in\mathcal{F}$ as both matrices have 1 on the diagonal in non-permutable rows and thus so does the product. We use this fact to again show that $\Delta_\mathcal{F}(\theta)=\Delta_\mathcal{F}(\theta^*)$ if and only if there exists a permutation symmetry $\sigma$ such that $\sigma(\theta)=\theta^*$.
+
+\begin{proof}
+\textit{Sufficiency}: Suppose that $\theta^*=\Pi^*\theta$ for some $\Pi^*\in\mathcal{F}$. Then
 \begin{align*}
 \Delta_\mathcal{F}(\theta^*) &= \left\{\Pi\theta^*:\Pi\in\mathcal{F}\right\} \\
 &= \left\{\Pi\Pi^*\theta:\Pi\in\mathcal{F}\right\} \\
 &= \left\{\Pi\theta:\Pi\in\mathcal{F}\right\} \\
 &= \Delta_\mathcal{F}(\theta)
 \end{align*}
-The proof for the converse follows the same argument for the scaling symmetry. Hence this permutation symmetry detector correctly maps the variables to their equivalent classes.
+where the above follows from the aforementioned fact.
+\\
 
-An example of a permutation symmetry breaker is easy to formulate. For convenience, suppose that the permutable variables in $\theta$ have distinct values. Then an example permutation breaker $\phi_\mathcal{F}$ is one such that $\phi_\mathcal{F}([\theta])=\theta^*$ where if $\theta_i$ and $\theta_j$ are permutable, then $\theta^*_i<\theta^*_j$. This breaker is well-defined as there are only at most $N!$ possible permutations of $\theta$. In the context of a probabilistic programming, this reduces to applying a sorting algorithm to certain entries of $\theta$.
+\noindent \textit{Necessity}: The proof for the converse follows the same argument for the scaling symmetry. Hence this permutation symmetry detector correctly maps the variables to their equivalent classes.
+\end{proof}
+
+An example of a \textit{permutation symmetry breaker} is easy to describe. For convenience, suppose that the permutable variables in $\theta$ have distinct values. Then an example permutation breaker $\phi_\mathcal{F}$ is one such that $\phi_\mathcal{F}([\theta])=\theta^*$ where if $\theta_i$ and $\theta_j$ are permutable, then $\theta^*_i<\theta^*_j$. In the context of a probabilistic programming, this reduces to applying a sorting algorithm to certain entries of $\theta$.
+
+One distinction between permutation equivalence classes and scaling equivalence classes is that the permutation equivalence classes are always finite. A class can have at most $N!$ members corresponding to the possible permutations of the variables. This makes the permutation symmetry breaker computationally simpler compared to the scaling symmetry breaker in that in the worst case, the breaker can just iterate over the equivalence class to pick a representative.
+
+
+\subsection{Other symmetries}
+
+We end this section with a brief comment about describing the other symmetries discussed in Nishihara et al. under the equivalence class formulation. The formulation for the sign-flip symmetry would likely closely resemble that of the scaling symmetry where the symmetries are given by the null space of the constraint matrix. An added benefit is that the space of symmetries is also finite due to having only two possible values for each exponent. On the other hand, we expect the translation symmetry to be difficult to describe under the equivalence formulation. The dependence on $\theta$ in the symmetry itself makes it challenging to define detection as a function in general notation.
 
 
 % ...

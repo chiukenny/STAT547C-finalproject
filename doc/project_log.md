@@ -49,3 +49,7 @@ This project log is used to record the progress of this project.
 
 * Added background and equivalence class formulation for permutation symmetries
 * Started writing formulation based on reparameterization section in body
+
+### 2019-12-06
+
+* Added introduction and context and edited previous notes
