@@ -4,7 +4,7 @@
 
 \section{Formulation based on equivalence classes}
 
-Our first approach to automatic symmetry detection and breaking uses a formulation based on equivalence classes. Symmetry detection can be framed as a problem of finding the set of parameters that are symmetric (an equivalence class) for a given factor graph. Similarly, symmetry breaking can be framed as choosing a single member (representative) from the set of parameters based on some desired criteria. We formalize these ideas mathematically.
+Our first approach to automatic symmetry detection and breaking uses a formulation based on equivalence classes. Symmetry detection can be framed as a problem of finding the set of variables that are symmetric (an equivalence class) for a given factor graph. Similarly, symmetry breaking can be framed as choosing a single member (representative) from the set of variables based on some desired criteria. We formalize these ideas mathematically.
 
 \begin{defn}
 Consider a factor graph $(\theta,F)$. Define $\Xi$ to be the equivalence relation such that for $\theta,\theta_*\in\Theta$, we have $\theta\Xequiv\theta^*$ if and only if there exists a local symmetry $\sigma$ such that $\sigma(\theta)=\theta^*$.

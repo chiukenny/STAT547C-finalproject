@@ -3,3 +3,141 @@
 % Exercises section
 
 \section{Exercises}
+
+\begin{enumerate}
+
+\item
+This exercise is a worked extended example from Nishihara et al. \cite{Nishihara:2013}. The factor graph from Figure \ref{fig:factorgraph} is shown again here.
+
+\begin{figure}[h]
+\begin{center}
+\tikz{
+\node[latent, xshift=-1cm] (t1) {$\theta_1$};
+\node[latent, xshift=1cm] (t2) {$\theta_2$};
+\node[latent, yshift=-2cm] (t3) {$\theta_3$};
+\node[latent, xshift=2cm, yshift=-2cm] (t4) {$\theta_4$};
+\node[obs, xshift=1cm, yshift=-4cm] (t5) {$\theta_5$};
+\factor[above=of t1] {f1} {above:Gaussian} {} {t1};
+\factor[above=of t2] {f2} {above:Gaussian} {} {t2};
+\factor[below=of t1, xshift=1cm] {fplus} {left:sum} {t1,t2} {t3};
+\factor[above=of t4] {f4} {above:Gaussian} {} {t4};
+\factor[below=of t3, xshift=1cm] {fprod} {left:product} {t3,t4} {t5}
+}
+\end{center}
+\end{figure}
+
+Some factors and the scaling constraints that they impose is provided in the following table.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|c|c|}
+\hline
+factor & constraints \\
+\hline
+$c=a+b$ & $d_a = d_b = d_c$ \\
+$c = a\times b$ & $d_c= d_a + d_b$ \\
+$c$ observed & $d_c=0$ \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{enumerate}
+
+\item
+Find the scaling constraint matrix $\mathcal{C}$ for this factor graph.
+
+\begin{solution}
+The sum factor adds the rows $d_1 - d_3 = 0$ and $d_2 - d_3 = 0$. \\
+The product factor adds the row $d_3 + d_4 - d_5 = 0$. \\
+The observed factor adds the row $d_5 = 0$.
+
+Aggregating the rows produces the following constraint matrix.
+\[
+\mathcal{C} =
+\begin{bmatrix}
+1 & 0 & -1 & 0 & 0 \\
+0 & 1 & -1 & 0 & 0 \\
+0 & 0 & 1 & 1 & -1 \\
+0 & 0 & 0 & 0 & 1
+\end{bmatrix}
+\]
+\end{solution}
+
+\item
+Find the null space of $\mathcal{C}$.
+
+\begin{solution}
+The null space of $\mathcal{C}$ is the solution to the following system of equations:
+\[
+\begin{bmatrix}
+1 & 0 & -1 & 0 & 0 \\
+0 & 1 & -1 & 0 & 0 \\
+0 & 0 & 1 & 1 & -1 \\
+0 & 0 & 0 & 0 & 1
+\end{bmatrix}
+\begin{bmatrix}
+d_1 \\ d_2 \\ d_3 \\ d_4 \\ d_5
+\end{bmatrix}
+=
+\begin{bmatrix}
+0 \\ 0 \\ 0 \\ 0 \\ 0
+\end{bmatrix}
+\]
+Solving for the solution gives the null space
+\[
+\mathcal{N}(\mathcal{C}) = \left\{c
+\begin{bmatrix}
+1 \\ 1 \\ 1 \\ -1 \\ 0
+\end{bmatrix}
+: c\in\mathbb{R}
+\right\}
+\]
+\end{solution}
+
+\item
+Under the equivalence class formulation, give the definition of the scaling symmetry detector for this factor graph $\mathcal{F}=(\theta,F,\Xi)$ where $\Xi$ is the equivalence relation for the scaling symmetry.
+
+\begin{solution}
+The scaling symmetry detector is defined as
+\[
+\Delta_\mathcal{F}(\theta) = \{\Sigma_d\theta:d\in\mathcal{N}(\mathcal{C})\}
+\]
+where $\Sigma_d$ is the diagonal matrix with $(e^{d_1},...,e^{d_5})$ on the diagonal and where $\mathcal{N}(\mathcal{C})$ is as found in the previous question. 
+\end{solution}
+
+\item
+Given $\theta^*=(\theta_1^*,...,\theta_5^*)^T$, what is $[\theta^*]$?
+
+\begin{solution}
+The equivalence class of $\theta^*$ can be found using the symmetry detector defined in the previous question.
+\[
+[\theta^*] = \Delta_\mathcal{F}(\theta^*) = \{\Sigma_d\theta^*:d\in\mathcal{N}(\mathcal{C})\} = \left\{
+\begin{bmatrix}
+e^{d_1}\theta_1^* \\
+\vdots \\
+e^{d_5}\theta_5^*
+\end{bmatrix}
+:
+d\in\mathcal{N}(\mathcal{C})
+\right\}
+\]
+\end{solution}
+
+\item
+Let $\|\cdot\|$ be the Euclidean norm. Define
+\[
+\phi_\mathcal{F}([\theta])=\underset{\theta\in[\theta],\|\theta\|=1}{\arg\min}\;\sum_{n=1}^5\theta_n
+\]
+Is $\phi_\mathcal{F}$ a scaling symmetry breaker?
+
+\begin{solution}
+No, $\phi_\mathcal{F}$ is not a scaling symmetry breaker as it does not necessarily return a single member of $[\theta]$.
+
+To see this, suppose that $\theta^*=(\theta_1^*,...,\theta_5^*)^*\in[\theta^*]$ satisfies $\|\theta^*\|=1$ and the minimum sum of components. Then $\theta'=(\theta_2^*,\theta_1^*,\theta_3^*,\theta_4^*,\theta_5^*)^T$ is also in $[\theta^*]$, satisfies $\|\theta'\|=1$ and also has the minimum sum of components. Hence $\phi_\mathcal{F}([\theta^*])$ returns at least two members of $[\theta^*]$.
+
+TODO
+\end{solution}
+
+\end{enumerate}
+
+\end{enumerate}

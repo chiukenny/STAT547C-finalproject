@@ -44,6 +44,13 @@
 \usepackage[capitalize]{cleveref}
 \crefname{appsec}{Appendix}{Appendices} % you can tell cleveref what to call things
 
-% Definitions
+% Definitions and solutions
 \theoremstyle{definition}
 \newtheorem{defn}{Definition}
+\newenvironment{solution}
+  {\begin{proof}[Solution]\renewcommand{\qedsymbol}{}}
+  {\end{proof}}
+
+% TikZ for graphs
+\usepackage{tikz}
+\usetikzlibrary{bayesnet}

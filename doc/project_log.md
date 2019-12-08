@@ -53,3 +53,8 @@ This project log is used to record the progress of this project.
 ### 2019-12-06
 
 * Added introduction and context and edited previous notes
+
+### 2019-12-07
+
+* Completed draft of background and body.
+* Added one exercise.
