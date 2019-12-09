@@ -113,31 +113,96 @@ The equivalence class of $\theta^*$ can be found using the symmetry detector def
 \[
 [\theta^*] = \Delta_\mathcal{F}(\theta^*) = \{\Sigma_d\theta^*:d\in\mathcal{N}(\mathcal{C})\} = \left\{
 \begin{bmatrix}
-e^{d_1}\theta_1^* \\
-\vdots \\
-e^{d_5}\theta_5^*
+e^c\theta_1^* \\
+e^c\theta_2^* \\
+e^c\theta_3^* \\
+e^{-c}\theta_4^* \\
+\theta_5^*
 \end{bmatrix}
 :
-d\in\mathcal{N}(\mathcal{C})
+c\in\mathbb{R}
 \right\}
 \]
 \end{solution}
 
+\end{enumerate}
+
 \item
-Let $\|\cdot\|$ be the Euclidean norm. Define
+Consider the equivalence class formulation. Suppose that a factor graph $\mathcal{F}$ has a scaling symmetry such that every equivalence class $[\theta]$ has some $\theta^*$ with Euclidean norm $\|\theta^*\|=1$. Define
 \[
-\phi_\mathcal{F}([\theta])=\underset{\theta\in[\theta],\|\theta\|=1}{\arg\min}\;\sum_{n=1}^5\theta_n
+\phi_\mathcal{F}([\theta])=\{\theta:\theta\in[\theta],\|\theta\|=1\}
 \]
-Is $\phi_\mathcal{F}$ a scaling symmetry breaker?
+Show that $\phi_\mathcal{F}([\theta])$ is a singleton for any $[\theta]$, i.e., that $\phi_\mathcal{F}$ is a scaling symmetry breaker. (\textit{Remark: here we use a singleton to denote the representative to allow this $\phi_\mathcal{F}$ to be defined in convenient notation.})
 
 \begin{solution}
-No, $\phi_\mathcal{F}$ is not a scaling symmetry breaker as it does not necessarily return a single member of $[\theta]$.
+We show this by contradiction.
 
-To see this, suppose that $\theta^*=(\theta_1^*,...,\theta_5^*)^*\in[\theta^*]$ satisfies $\|\theta^*\|=1$ and the minimum sum of components. Then $\theta'=(\theta_2^*,\theta_1^*,\theta_3^*,\theta_4^*,\theta_5^*)^T$ is also in $[\theta^*]$, satisfies $\|\theta'\|=1$ and also has the minimum sum of components. Hence $\phi_\mathcal{F}([\theta^*])$ returns at least two members of $[\theta^*]$.
+Suppose that for some equivalence class $[\theta]$, $\phi_\mathcal{F}([\theta])$ returns a set containing two members $\theta^*$ and $\theta$. By definition of $[\theta]$, we must have $\theta^*=\Sigma_{d^*}\theta$ for some $d^*\in\mathcal{N}(\mathcal{C})$. Then
+\[
+\|\theta^*\| = \|\Sigma_{d^*}\theta\| = 1 = \|\theta\| \iff \Sigma_{d^*}^T\Sigma_{d^*} = \mathcal{I}
+\]
+where $\mathcal{I}$ is the identity matrix. Hence $\Sigma_{d^*}$ must be orthogonal. But because $\Sigma_{d^*}$ is diagonal and positive definite, $\Sigma_{d^*}$ must be the identity matrix and so $\theta^*=\mathcal{I}\theta = \theta$. Contradiction and thus $\phi_\mathcal{F}$ returns a singleton for any $[\theta]$.
 
-TODO
+We note that this $\phi_\mathcal{F}$ is only well-defined under the assumption that every equivalence class has some $\theta$ with unit norm. This is generally not true in all factor graphs. For example, a factor graph that has no scaling symmetries has every $\theta$ is in its own equivalence class but $\theta$ may not have a unit norm.
 \end{solution}
 
-\end{enumerate}
+\newpage
+
+\item
+Consider the following factor graph that has an exponential prior with rate $\beta = \frac{1}{2}$ and a chi-squared prior with degrees of freedom $d=2$:
+
+\begin{figure}[h]
+\begin{center}
+\tikz{
+\node[latent, xshift=-1cm] (t1) {$\theta_1$};
+\node[latent, xshift=1cm] (t2) {$\theta_2$};
+\node[latent, yshift=-2cm] (other) {...};
+\factor[above=of t1] {f1} {above:Exp$\left(\frac{1}{2}\right)$} {} {t1};
+\factor[above=of t2] {f2} {above:$\chi^2(2)$} {} {t2};
+\factor[below=of t1,xshift=1cm] {fplus} {left:sum} {t1,t2} {other}
+}
+\end{center}
+\end{figure}
+
+This factor graph has a permutation symmetry. Explain why and suggest one way to break the symmetry under the reparameterization formulation.
+
+Let $\lambda$ denote the Lebesgue measure. You may find the following useful:
+\[
+\mathbb{P}(\theta_1\in dx) = \lambda(dx)\beta e^{-\beta x} \qquad x\in\mathbb{R}_+
+\]
+\[
+\mathbb{P}(\theta_2\in dx) = \lambda(dx)\frac{1}{2^{\frac{d}{2}}\Gamma\left(\frac{d}{2}\right)}x^{\frac{d}{2}-1}e^{-\frac{x}{2}} \qquad x\in\mathbb{R}_+
+\]
+
+\begin{solution}
+Notice that
+\[
+\mathbb{P}(\theta_1\in dx) = \lambda(dx)\frac{1}{2}e^{-\frac{1}{2}x} \qquad x\in\mathbb{R}_+
+\]
+and
+\[
+\mathbb{P}(\theta_2\in dx) = \lambda(dx)\frac{1}{2^{\frac{2}{2}}\Gamma\left(\frac{2}{2}\right)}x^{\frac{2}{2}-1}e^{-\frac{x}{2}} = \lambda(dx)\frac{1}{2}e^{-\frac{x}{2}} \qquad x\in\mathbb{R}_+
+\]
+and so $\theta_1$ and $\theta_2$ have the same distribution. Hence the permutation symmetry exists because the inputs to the sum factor are symmetric. In this case, the symmetry can be broken by merging the sum factor with the priors as the sum is specified by a gamma distribution with shape $\alpha=2$ and rate $\beta=\frac{1}{2}$. We show this using the Laplace transform. For $r\in\mathbb{R}_+$, we have
+\[
+\mathbb{E}[e^{-r\theta_1}] = \mathbb{E}[e^{-r\theta_2}] = \frac{2^{-1}}{2^{-1}+r}
+\]
+Then by independence of $\theta_1$ and $\theta_2$,
+\[
+\mathbb{E}[e^{-r(\theta_1+\theta_2)}] = \mathbb{E}[e^{-r\theta_1}]\mathbb{E}[e^{-r\theta_2}] = \left(\frac{2^{-1}}{2^{-1}+r}\right)^2
+\]
+which corresponds to the Laplace transform of the mentioned gamma distribution. The new factor graph obtained from merging is
+
+\begin{figure}[h]
+\begin{center}
+\tikz{
+\node[latent] (t12) {$\theta_{12}$};
+\node[latent, yshift=-1.25cm] (other) {...};
+\factor[above=of t12] {f1} {above:Gamma$\left(2,2^{-1}\right)$} {} {t12};
+\edge {t12} {other}
+}
+\end{center}
+\end{figure}
+\end{solution}
 
 \end{enumerate}

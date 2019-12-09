@@ -33,17 +33,6 @@
 \pagestyle{fancy}
 \setlength{\headheight}{40pt}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% most other packages you might use should be loaded before hyperref
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% Set up hyperlinks:
-\definecolor{RefColor}{rgb}{0,0,.65}
-\usepackage[colorlinks,linkcolor=RefColor,citecolor=RefColor,urlcolor=RefColor]{hyperref}
-
-\usepackage[capitalize]{cleveref}
-\crefname{appsec}{Appendix}{Appendices} % you can tell cleveref what to call things
-
 % Definitions and solutions
 \theoremstyle{definition}
 \newtheorem{defn}{Definition}
@@ -54,3 +43,14 @@
 % TikZ for graphs
 \usepackage{tikz}
 \usetikzlibrary{bayesnet}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% most other packages you might use should be loaded before hyperref
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Set up hyperlinks:
+\definecolor{RefColor}{rgb}{0,0,.65}
+\usepackage[colorlinks,linkcolor=RefColor,citecolor=RefColor,urlcolor=RefColor]{hyperref}
+
+\usepackage[capitalize]{cleveref}
+\crefname{appsec}{Appendix}{Appendices} % you can tell cleveref what to call things

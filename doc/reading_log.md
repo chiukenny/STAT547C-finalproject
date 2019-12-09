@@ -16,3 +16,8 @@ Symmetries that can be written as linear combinations of the variables (matrices
 ### Graph Isomorphism in Quasipolynomial Time. https://arxiv.org/abs/1512.03547
 
 Skimmed parts of this. Apparently proof was retracted then later corrected.
+
+## 2019-12-08
+### Defining Functions on Equivalence Classes. https://www.cl.cam.ac.uk/~lp15/papers/Reports/equivclasses.pdf
+
+Some proofs of functions defined on equivalence classes. Are any results relevant? Some notation/concepts may be useful for further development of formulation.

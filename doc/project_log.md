@@ -58,3 +58,7 @@ This project log is used to record the progress of this project.
 
 * Completed draft of background and body.
 * Added one exercise.
+
+### 2019-12-08
+
+* Completed draft of report.

@@ -4,10 +4,10 @@
 
 \section{Formulation based on equivalence classes}
 
-Our first approach to automatic symmetry detection and breaking uses a formulation based on equivalence classes. Symmetry detection can be framed as a problem of finding the set of variables that are symmetric (an equivalence class) for a given factor graph. Similarly, symmetry breaking can be framed as choosing a single member (representative) from the set of variables based on some desired criteria. We formalize these ideas mathematically.
+The first formulation of symmetry detection and breaking that we introduce is based on the idea of equivalence classes. Symmetry detection can be framed as a problem of finding the set of variables that are symmetric (an equivalence class) for a given factor graph. Similarly, symmetry breaking can be framed as choosing a single member (representative) from the set of variables based on some desired criteria. We formalize these ideas mathematically.
 
 \begin{defn}
-Consider a factor graph $(\theta,F)$. Define $\Xi$ to be the equivalence relation such that for $\theta,\theta_*\in\Theta$, we have $\theta\Xequiv\theta^*$ if and only if there exists a local symmetry $\sigma$ such that $\sigma(\theta)=\theta^*$.
+Consider a factor graph $(\theta,F)$. Define $\Xi$ to be the equivalence relation such that for $\theta,\theta^*\in\Theta$, we have $\theta\Xequiv\theta^*$ if and only if there exists a local symmetry $\sigma$ such that $\sigma(\theta)=\theta^*$.
 \end{defn}
 
 \noindent We show that $\Xi$ is a proper equivalence relation.
@@ -111,17 +111,6 @@ It is more difficult to provide a concrete example of a \textit{scaling symmetry
 \]
 However, this mathematically convenient notation hides the question of how to computationally solve for the minimum norm when $[\theta]$ may be an uncountable nonlinear space. Consideration will also need to be given in how to deal with multiple members having the same norm.
 
-\iffalse
-Under the assumption that the representative $\theta^*$ is known for all descriptions $[\cdot]$ of any equivalence class in $\Theta/\Xi$, it is straightforward to transform any $\theta$ to the representative of its class. Note that
-\[
-\theta = \Sigma_{d^*}\theta^*
-\]
-for some $d^*\in\mathcal{N}(\mathcal{C})$. Then because $\Sigma_{d^*}$ is positive definite, the inverse exists and hence
-\[
-\Sigma_{d^*}^{-1}\theta = \theta^*
-\]
-\fi
-
 
 \subsection{Permutation symmetries}
 
@@ -136,7 +125,7 @@ where again the right-hand side is taken to be a matrix-vector product. Permutat
 \[
 \Delta_\mathcal{F}(\theta) = \left\{\Pi\theta:\Pi\in\mathcal{F}\right\} = [\theta]
 \]
-Under this definition, it is assumed that there are no restrictions on the permutations of the permutable variables. If variables are permutable with only certain others, multiple permutation symmetry detectors are needed where each detects the symmetries in a subset of permutable variables.
+Under this definition, it is assumed that there are no restrictions on the permutations of the permutable variables. If variables are permutable with only certain others, multiple permutation symmetry detectors are needed where each detects the symmetries among a subset of permutable variables.
 \end{defn}
 
 Notice that if $\Pi,\Pi^*\in\mathcal{F}$, then the matrix product $\Pi\Pi^*$ is itself a permutation matrix by properties of permutation matrices. Furthermore, $\Pi\Pi^*\in\mathcal{F}$ as both matrices have 1 on the diagonal in non-permutable rows and thus so does the product. We use this fact to again show that $\Delta_\mathcal{F}(\theta)=\Delta_\mathcal{F}(\theta^*)$ if and only if there exists a permutation symmetry $\sigma$ such that $\sigma(\theta)=\theta^*$.
@@ -152,10 +141,10 @@ Notice that if $\Pi,\Pi^*\in\mathcal{F}$, then the matrix product $\Pi\Pi^*$ is 
 where the above follows from the aforementioned fact.
 \\
 
-\noindent \textit{Necessity}: The proof for the converse follows the same argument for the scaling symmetry. Hence this permutation symmetry detector correctly maps the variables to their equivalent classes.
+\noindent \textit{Necessity}: The proof for the converse follows the same argument as for the scaling symmetry. Hence this permutation symmetry detector correctly maps the variables to their equivalent classes.
 \end{proof}
 
-An example of a \textit{permutation symmetry breaker} is easy to describe. For convenience, suppose that the permutable variables in $\theta$ have distinct values. Then an example permutation breaker $\phi_\mathcal{F}$ is one such that $\phi_\mathcal{F}([\theta])=\theta^*$ where if $\theta_i$ and $\theta_j$ are permutable, then $\theta^*_i<\theta^*_j$. In the context of a probabilistic programming, this reduces to applying a sorting algorithm to certain entries of $\theta$.
+An example of a \textit{permutation symmetry breaker} is easy to describe. For convenience, suppose that the permutable variables in $\theta$ have distinct values. Then an example permutation breaker $\phi_\mathcal{F}$ is one such that $\phi_\mathcal{F}([\theta])=\theta^*$ where if $\theta_i$ and $\theta_j$ are permutable, then $\theta^*_i<\theta^*_j$. In the context of probabilistic programming, this reduces to a sorting problem involving certain entries of $\theta$.
 
 One distinction between permutation equivalence classes and scaling equivalence classes is that the permutation equivalence classes are always finite. A class can have at most $N!$ members corresponding to the possible permutations of the variables. This makes the permutation symmetry breaker computationally simpler compared to the scaling symmetry breaker in that in the worst case, the breaker can just iterate over the equivalence class to pick a representative.
 
