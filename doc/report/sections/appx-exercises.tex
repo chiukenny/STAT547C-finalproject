@@ -67,7 +67,7 @@ Aggregating the rows produces the following constraint matrix.
 Find the null space of $\mathcal{C}$.
 
 \begin{solution}
-The null space of $\mathcal{C}$ is the solution to the following system of equations:
+A basis for the null space of $\mathcal{C}$ is given by the solution to the following system of equations.
 \[
 \begin{bmatrix}
 1 & 0 & -1 & 0 & 0 \\
@@ -83,7 +83,7 @@ d_1 \\ d_2 \\ d_3 \\ d_4 \\ d_5
 0 \\ 0 \\ 0 \\ 0 \\ 0
 \end{bmatrix}
 \]
-Solving for the solution gives the null space
+Solving for the solution leads to the null space
 \[
 \mathcal{N}(\mathcal{C}) = \left\{c
 \begin{bmatrix}
@@ -95,18 +95,18 @@ Solving for the solution gives the null space
 \end{solution}
 
 \item
-Under the equivalence class formulation, give the definition of the scaling symmetry detector for this factor graph $\mathcal{F}=(\theta,F,\Xi)$ where $\Xi$ is the equivalence relation for the scaling symmetry.
+Under the equivalence class formulation, give the definition of the scaling symmetry detector for this factor graph $\mathcal{F}$.
 
 \begin{solution}
 The scaling symmetry detector is defined as
 \[
 \Delta_\mathcal{F}(\theta) = \{\Sigma_d\theta:d\in\mathcal{N}(\mathcal{C})\}
 \]
-where $\Sigma_d$ is the diagonal matrix with $(e^{d_1},...,e^{d_5})$ on the diagonal and where $\mathcal{N}(\mathcal{C})$ is as found in the previous question. 
+where $\Sigma_d$ is the diagonal matrix with $(e^{d_1},...,e^{d_5})$ on the diagonal and $\mathcal{N}(\mathcal{C})$ is as found in the previous question. 
 \end{solution}
 
 \item
-Given $\theta^*=(\theta_1^*,...,\theta_5^*)^T$, what is $[\theta^*]$?
+Given $\theta^*=(\theta_1^*,...,\theta_5^*)^T$, find $[\theta^*]$.
 
 \begin{solution}
 The equivalence class of $\theta^*$ can be found using the symmetry detector defined in the previous question.
@@ -125,14 +125,23 @@ c\in\mathbb{R}
 \]
 \end{solution}
 
-\end{enumerate}
-
+\iffalse
 \item
-Consider the equivalence class formulation. Suppose that a factor graph $\mathcal{F}$ has a scaling symmetry such that every equivalence class $[\theta]$ has some $\theta^*$ with Euclidean norm $\|\theta^*\|=1$. Define
+Let $\|\cdot\|$ denote the Euclidean norm. Suppose that for any equivalence class $[\theta]$, no two members have the same norm. Consider a symmetry breaker of the form
 \[
 \phi_\mathcal{F}([\theta])=\{\theta:\theta\in[\theta],\|\theta\|=1\}
 \]
-Show that $\phi_\mathcal{F}([\theta])$ is a singleton for any $[\theta]$, i.e., that $\phi_\mathcal{F}$ is a scaling symmetry breaker. (\textit{Remark: here we use a singleton to denote the representative to allow this $\phi_\mathcal{F}$ to be defined in convenient notation.})
+\fi
+
+\end{enumerate}
+
+\iffalse
+\item
+Consider the equivalence class formulation. Suppose that a factor graph $\mathcal{F}$ has a scaling symmetry such that every equivalence class $[\theta]$ has a member $\theta^*$ with Euclidean norm $\|\theta^*\|=1$. Define
+\[
+\phi_\mathcal{F}([\theta])=\{\theta:\theta\in[\theta],\|\theta\|=1\}
+\]
+Show that $\phi_\mathcal{F}([\theta])$ is a singleton for any $[\theta]$, i.e., that $\phi_\mathcal{F}$ is a scaling symmetry breaker. (\textit{Remark: here we use a singleton to denote the representative to allow this $\phi_\mathcal{F}$ to be defined in simple notation.})
 
 \begin{solution}
 We show this by contradiction.
@@ -145,6 +154,7 @@ where $\mathcal{I}$ is the identity matrix. Hence $\Sigma_{d^*}$ must be orthogo
 
 We note that this $\phi_\mathcal{F}$ is only well-defined under the assumption that every equivalence class has some $\theta$ with unit norm. This is generally not true in all factor graphs. For example, a factor graph that has no scaling symmetries has every $\theta$ is in its own equivalence class but $\theta$ may not have a unit norm.
 \end{solution}
+\fi
 
 \newpage
 
@@ -183,7 +193,7 @@ and
 \[
 \mathbb{P}(\theta_2\in dx) = \lambda(dx)\frac{1}{2^{\frac{2}{2}}\Gamma\left(\frac{2}{2}\right)}x^{\frac{2}{2}-1}e^{-\frac{x}{2}} = \lambda(dx)\frac{1}{2}e^{-\frac{x}{2}} \qquad x\in\mathbb{R}_+
 \]
-and so $\theta_1$ and $\theta_2$ have the same distribution. Hence the permutation symmetry exists because the inputs to the sum factor are symmetric. In this case, the symmetry can be broken by merging the sum factor with the priors as the sum is specified by a gamma distribution with shape $\alpha=2$ and rate $\beta=\frac{1}{2}$. We show this using the Laplace transform. For $r\in\mathbb{R}_+$, we have
+and so $\theta_1$ and $\theta_2$ have the same distribution. Hence the permutation symmetry exists because the inputs to the sum factor are symmetric. In this case, the symmetry can be broken by merging the sum factor with its inputs as the sum is specified by a gamma distribution with shape $\alpha=2$ and rate $\beta=\frac{1}{2}$. We show this using the Laplace transform. For $r\in\mathbb{R}_+$, we have
 \[
 \mathbb{E}[e^{-r\theta_1}] = \mathbb{E}[e^{-r\theta_2}] = \frac{2^{-1}}{2^{-1}+r}
 \]

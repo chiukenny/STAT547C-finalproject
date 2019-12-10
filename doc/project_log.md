@@ -62,3 +62,8 @@ This project log is used to record the progress of this project.
 ### 2019-12-08
 
 * Completed draft of report.
+
+### 2019-12-09
+
+* Revised report.
+* Found error in proof of one exercise. Need to replace with another.

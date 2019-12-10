@@ -4,11 +4,11 @@
 
 \section{Background}
 
-\textit{Probabilistic programming} is a modern programming paradigm in which inference is automatically performed on probabilistic models that are specified by the user. The probabilistic models are often in the form of a generative Bayesian model and can be conveniently expressed by a graphical model \cite{Rainforth:2017}. A key consideration of probabilistic programming is that the choice of the inference algorithm used for the given probabilistic model is left up to the underlying inference engine. By abstracting away the inference step, users have the flexibility to work with multiple models without needing to modify their inference procedure for each model.
+\textit{Probabilistic programming} is a modern programming paradigm in which inference is automatically performed on probabilistic models that are specified by the user. The probabilistic models are often in the form of a generative Bayesian model and can be conveniently expressed by a graphical model \cite{Rainforth:2017}. An important aspect of probabilistic programming is that the choice of inference algorithm used for the given probabilistic model is left up to the underlying inference engine. By abstracting away the inference step, users have the flexibility to work with multiple models without needing to modify their inference procedure between models.
 
-However, existing inference algorithms do not work well in all models with one challenge being the possible existence of \textit{symmetries} in the parameterization of a model \cite{Nishihara:2013}. A symmetry can be informally described as a transformation to the model parameters that does not change the posterior distribution. If a symmetry is present in a model, this poses the problem of parameter nonidentifiability where the results of inference may be of poor quality and difficult to interpret. Another consequence of having parameter symmetries is that different samples of the model parameters may be strongly correlated as a result. In particular, this may reduce the performance of sampling-based inference algorithms.
+However, existing inference algorithms do not work well in all models with one challenge being the possible existence of \textit{symmetries} in the parameterization of a model \cite{Nishihara:2013}. A symmetry can be informally described as a transformation to the parameters that does not change the overall model. If a symmetry is present in a model, it poses a problem of parameter nonidentifiability where the results of inference may be of poor quality and difficult to interpret. Another consequence of having parameter symmetries is that different samples of the model parameters may be strongly correlated as a result. In particular, this may reduce the performance of sampling-based inference algorithms.
 
-The problems of parameter symmetries provide motivation for \textit{detecting} and \textit{breaking} them in probabilistic programs. Symmetry detection refers to determining if a symmetry exists in the parameterization of a model, and symmetry breaking refers to dealing with symmetries in some way such that the problems they cause are no longer of concern. The paper by Nishihara et al. \cite{Nishihara:2013} introduces algorithms for automatically detecting various types of parameter symmetries in a probabilistic programming context. We directly build on their work by formulating two mathematical perspectives of symmetry detection and breaking that have potential for automation. We first provide an overview of the required concepts and notations in the remainder of this section.
+The problems of parameter symmetries provide motivation for \textit{detecting} and \textit{breaking} them in probabilistic programs. Symmetry detection refers to determining if a symmetry exists in the parameterization of a model, and symmetry breaking refers to dealing with symmetries in some way such that the problems they cause are no longer of concern. The paper by Nishihara et al. \cite{Nishihara:2013} introduces algorithms for automatically detecting various types of parameter symmetries in a probabilistic programming context. We directly build on their work by formulating two mathematical perspectives of symmetry detection and breaking that have potential to be automatic. We first provide an overview of the required concepts and notations in the remainder of this section.
 
 
 \subsection{Definitions and notations}
@@ -38,13 +38,13 @@ Given data, the unnormalized posterior distribution can then be expressed as
 \[
 \prod_kF_k(\theta)
 \]
-where factor $F_k$ may not necessarily depend on all of $\theta$. In the context of symmetries, priors are not of interest as it is assumed that the parameters of the prior are chosen by the user. The remainder of this report will refer to non-prior factors when considering $F_k$. We now formally define symmetries as provided in Nishihara et al.
+where factor $F_k$ may not necessarily depend on all of $\theta$. In the context of symmetries, priors are not of interest as it is assumed that the parameters of the prior are chosen by the user. The remainder of this report will refer to non-prior factors when considering $F_k$. We now formally introduce symmetries as defined in Nishihara et al.
 \begin{defn}
 A symmetry $\sigma:\Theta\rightarrow\Theta$ is a measurable function with a measurable inverse that satisfies
 \[
 \prod_kF_k(\theta) \propto \prod_kF_k(\sigma(\theta))
 \]
-and where if $\theta_n$ is some observed variable, then the symmetry keeps $\theta_n$ fixed. In other words, a symmetry is a transformation on the variables that preserves the product likelihood up to a scaling constant. One may also consider a specific subset of symmetries, referred to as local symmetries.
+and where if $\theta_n$ is some observed variable, then the symmetry keeps $\theta_n$ fixed. In other words, a symmetry is a transformation on the variables that preserves the overall likelihood up to a scaling constant. One may also consider a specific subset of symmetries, referred to as \textit{local symmetries}.
 \end{defn}
 
 \begin{defn}
@@ -55,20 +55,22 @@ F_k(\theta) \propto F_k\left(\sigma(\theta)\right)
 for all non-prior factors $F_k$. In contrast to a symmetry, a local symmetry is a transformation on the variables that preserves the likelihood at each factor up to a scaling constant. Nishihara et al. mainly focuses on detecting local symmetries as they tend to be easier to identify than non-local symmetries.
 \end{defn}
 
-The work by Nishihara et al. discusses several types of symmetries and how they can be detected for a given factor graph. Their work is presented in the context of a probabilistic programming environment where it is assumed that all built-in factors have been annotated with constraints and/or labels that correspond to specific types of symmetries. In this report, we will assume that these annotations are intrinsic properties of the factors $F_k$ and hence are known for a given factor graph. The next two subsections present two of the symmetries discussed in Nishihara et al. and review the approaches and annotations used in their algorithm to detect them.
+The paper by Nishihara et al. discusses several types of symmetries and how they can be detected for a given factor graph. Their work is presented in the context of a probabilistic programming language where it is assumed that all built-in factors have been annotated with constraints and/or labels that correspond to specific types of symmetries. In this report, we will assume that these annotations are intrinsic properties of the factors $F_k$ and hence are known for a given $(\theta,F)$. The next two subsections provide an overview of two types of symmetries and the approaches that Nishihara et al. use to detect them.
 
 
 \subsection{Scaling symmetries} \label{sec:scaling}
 
-A local symmetry that describes the case where variables can be scaled without affecting the overall likelihood is known as a \textit{scaling symmetry}.
+A local symmetry that scales each variable by some constant without affecting the model is known as a \textit{scaling symmetry}.
+
 \begin{defn}
 A scaling symmetry is a local symmetry $\sigma$ such that
 \[
 \sigma: (\theta_1,...,\theta_N) \longmapsto (r_1\theta_1,...,r_N\theta_N) = (e^{d_1}\theta_1,...,e^{d_N}\theta_N)
 \]
-where $r_n\in\mathbb{R}_+$ and $d_n=\log r_n$. Note that the definition of scaling symmetries only includes positive scaling. A symmetry that describes the case where the signs of variables can be flipped is a \textit{sign-flip symmetry} which we only briefly allude to in this report.
+where $r_n\in\mathbb{R}_+$ and $d_n=\log r_n$. The scaling symmety only considers positive scaling by definition. A symmetry that flips the signs of variables is a \textit{sign-flip symmetry} which we only briefly allude to in this report.
 \end{defn}
-Examples of the constraints that factors impose on the scaling of the variables are provided in Table \ref{tab:scaling}. For example, a \textit{sum factor} that sums inputs $a+b=c$ preserves its integrity under scaling only if both $a$, $b$, and $c$ are scaled by the same amount. This is enforced by the constraint $d_a=d_b=d_c$ that it imposes.
+
+Scaling symmetries are detected by solving for the set of constants that the variables can scale by based on the aggregated factor constraints. Examples of factors and the constraints that they impose on scaling are provided in Table \ref{tab:scaling}. For instance, a \textit{sum factor} that sums inputs $a+b=c$ preserves its integrity under scaling only if both $a$, $b$, and $c$ are scaled by the same amount. This is enforced by the constraint $d_a=d_b=d_c$ that it imposes.
 
 \begin{table}[b]
 \centering
@@ -85,30 +87,32 @@ $x\geq0$ & none \\
 \label{tab:scaling}
 \end{table}
 
-Let $d=(d_1,...,d_N)$ be the vector of scaling exponents. Consider the matrix $\mathcal{C}$ constructed by stacking all the constraints in a given factor graph, which we refer to as the \textit{constraint matrix}. For example, the sum factor above adds the rows $d_a-d_c=0$ and $d_b-d_c=0$ to $\mathcal{C}$. Its null space $\mathcal{N}(\mathcal{C})$ then describes the space of $d$ that satisfies all the constraints. The scaling symmetries of the factor graph can then be expressed by the set $\{\sigma_d:d\in\mathcal{N}(\mathcal{C})\}$.
+Let $d=(d_1,...,d_N)$ be the vector of scaling exponents. Consider the \textit{constraint matrix} $\mathcal{C}$ constructed by stacking all the constraints in a given factor graph. For example, the mentioned sum factor adds the rows $d_a-d_c=0$ and $d_b-d_c=0$ to $\mathcal{C}$. The null space $\mathcal{N}(\mathcal{C})$ of the constraint matrix then describes the space of scaling exponents that satisfy all the constraints. The scaling symmetries in the factor graph can then be expressed as the set $\{\sigma_d:d\in\mathcal{N}(\mathcal{C})\}$.
 
 
 \subsection{Permutation symmetries} \label{sec:permutation}
 
-The \textit{permutation symmetry} describes the case where the variables can be permuted without changing the overall likelihood. Permutation symmetries are often present in models that have mixture components or latent features and are commonly characterized by the label-switching problem.
+A \textit{permutation symmetry} permutes the variables without changing the overall likelihood. Permutation symmetries are often present in models that have mixture components or latent features and are commonly characterized by the label-switching problem.
 
 \begin{defn}
-A permutation symmetry is a non-local symmetry $\sigma$ that permutes the components of $\theta$ and that satisfies
+A permutation symmetry is a non-local symmetry $\sigma$ that permutes the components of $\theta$ while satisfying
 \[
 \prod_{\text{label}(k)=c}F_k(\sigma(\theta)) = \prod_{\text{label}(k)=c}F_k(\theta)
 \]
-for all \textit{factor labels} $c$. A factor label is an identifier of a factor that is shared only between factors of the same type. For example, all binary sum factors would have the same label but a binary sum factor and a ternary sum factor would not.
+for all \textit{factor labels} $c$. A factor label is an identifier of a factor that is shared only between factors of the same type. For example, all binary sum factors have the same label but a binary sum factor and a ternary sum factor do not.
 \end{defn}
 
-To detect permutation symmetries, the factors must have factor labels and their arguments (edges) must also be labeled such that two arguments share the same label if and only if the factor is symmetric with respect to those two arguments. For example, if the variables to the arguments $a$ and $b$ of the sum factor $c=a+b$ are symmetric, the incoming edges of the sum factor would have the same label. Given the labels, Nishihara et al. then reduces the detection problem to a graph \textit{automorphism} problem where the permutation symmetries of the factor graph are the automorphisms that preserve the factor and argument labels. In the context of graphs, an automorphism is a mapping of a graph onto itself that retains how the vertices and edges are connected. Detection of graph automorphism can be done in quasipolynomial time \cite{Babai:2016} though in practice most graphs can be tested in linear time \cite{Babai:1980}.
+To detect permutation symmetries, all factors must have factor labels. Their arguments (incoming edges of the factor) must also be labeled such that two arguments share the same label if and only if the factor is symmetric with respect to those two. For example, the arguments $a$ and $b$ in the sum factor $c=a+b$ would have the same label if the input variables to $a$ and $b$ are symmetric. Given the labels, Nishihara et al. then reduces the detection problem to a graph \textit{automorphism} problem where the permutation symmetries of the factor graph are the automorphisms that preserve the factor and argument labels. In the context of graphs, an automorphism is a mapping of a graph onto itself that retains how the vertices and edges are connected. Detection of graph automorphisms can be done in quasipolynomial time \cite{Babai:2016} though in practice most graphs can be tested in linear time \cite{Babai:1980}.
 
-Nishihara et al. also note that this approach is dependent on how the factor graph is structured. For example, the approach will identify the symmetry across $a$, $b$ and $c$ in the ternary sum factor $a+b+c$ but will only identify the symmetry for $a$, $b$ and for $a+b$, $c$ in the layered binary sum factors $(a+b)+c$.
+Note that the permutation symmetries found through this approach is dependent on the structure of the factor graph. For example, the approach will identify the symmetry across arguments $a$, $b$ and $c$ in the ternary sum factor $a+b+c$ but will only identify the symmetry for $a$, $b$ and for $a+b$, $c$ in the layered binary sum factors $(a+b)+c$.
 
 
 \subsection{Other symmetries}
 
-We briefly introduce the other (local) symmetries discussed in Nishihara et al. without giving a formal definition. As referred to previously, a sign-flip symmetry describes the case where the signs of variables can be flipped. The symmetry is similar to the scaling symmetry in that each variable is multiplied by some $r_n$ but with the restriction that $r_n=(-1)^{s_n}$ where $s_n\in\{0,1\}$.
-A \textit{translation symmetry} describes the case where the variables can be shifted. The translation symmetry is different from the scaling and sign-flip symmetries in that the translation can depend on other variables, i.e.,
+We briefly describe two other (local) symmetries without giving formal definitions. As mentioned previously, a sign-flip symmetry flips the signs of variables. The symmetry is similar to the scaling symmetry in that each variable is multiplied by some $r_n$ but with the restriction that $r_n=(-1)^{s_n}$ where $s_n\in\{0,1\}$.
+
+
+A \textit{translation symmetry} shifts the variables by some amount. The translation symmetry is different from the scaling and sign-flip symmetries in that the translation can depend on other variables, i.e.,
 \[
 \sigma(\theta)=\theta+t(\theta)
 \]
@@ -117,36 +121,38 @@ where $t(\theta)$ can depend on the variables not being translated. Detection of
 
 \subsection{Symmetry breaking}
 
-We provide two examples of how symmetry breaking has been handled in the literature. Most discussions of symmetry breaking were in the context of specific models that have known symmetries. For example, the Rasch model used in political science and given by
+We reference two examples in the literature where parameter symmetries were explicitly dealt with. Most mentions of symmetry breaking are in the context of specific models that have known symmetries. For example, the Rasch model used in political science and given by
 \[
 \mathbb{P}(y_i=1) = \text{logit}^{-1}\left(\gamma_{k,i}(\alpha_{j,i}-\beta_{k,i})\right)
 \]
-has a scaling symmetry where parameter $\gamma_k$ can be scaled by a constant and parameters $\alpha_j$ and $\beta_k$ divided by the same constant. Bafumi et al. \cite{Bafumi:2005} proposed two solutions to resolve the aliasing: constrain $\alpha_j$ to have a fixed distribution (e.g. standard normal) or introduce hyperpriors for the parameters and recover the original parameters after estimation through normalization. Stephens et al. \cite{Stephens:2000} looked at permutation symmetries in a mixture model. They suggested a relabelling algorithm based on loss functions as an alternative to imposing ordering constraints on the parameters. In general, these solutions along with others that have been suggested in the literature tend to be specific to the model and context. We expect that the techniques used in these solutions are likely to be generalizable to deal with specific symmetries in different models.
+has a scaling symmetry where parameter $\gamma_k$ can be scaled by a constant and parameters $\alpha_j$ and $\beta_k$ divided by the same constant. Bafumi et al. \cite{Bafumi:2005} proposed two solutions to resolve this aliasing: constrain $\alpha_j$ to have a fixed distribution (e.g. standard normal) or introduce hyperpriors for the parameters and recover the original parameters after inference through normalization. Stephens et al. \cite{Stephens:2000} looked at permutation symmetries in a mixture model. They proposed a relabelling algorithm based on loss functions as an alternative to imposing ordering constraints on the parameters.
+
+These solutions, along with others in the literature, tend to be specific to the model and context. We note the techniques used in these solutions and consider ways to incorporate them in our formulations under a general model context.
 
 
 \subsection{Equivalence class}
 
-One formulation of symmetry detection and breaking that we will present in this report is based on the idea of \textit{equivalence classes}. This section provides a brief review of the definitions and properties of equivalence classes that are relevant for our purposes.
+One formulation of symmetry detection and breaking that we will present in this report is based on the idea of \textit{equivalence classes}. We provide a brief review of the definitions and properties of equivalence classes that will be relevant for our formulation.
 
 \begin{defn}
-Let $A$ be a set. For all $a,b,c\in A$, an \textit{equivalence relation} $\Xi$ on $A$ is a binary relation that satisfies the following three properties:
+Let $S$ be a set. For all $a,b,c\in S$, an \textit{equivalence relation} $\Xi$ on $S$ is a binary relation that satisfies the following three properties:
 \begin{enumerate}
 
 \item
-\textbf{reflexivity}: $a\Xequiv a$
+\textbf{reflexivity}: $a\Xequiv a$.
 
 \item
-\textbf{symmetry}: if $a\Xequiv b$ then $b\Xequiv a$
+\textbf{symmetry}: if $a\Xequiv b$ then $b\Xequiv a$.
 
 \item
-\textbf{transitivity}: if $a\Xequiv b$ and $b\Xequiv c$ then $a\Xequiv c$
+\textbf{transitivity}: if $a\Xequiv b$ and $b\Xequiv c$ then $a\Xequiv c$.
 
 \end{enumerate}
-An equivalence relation $\Xi$ partitions $A$ into subsets called equivalence classes. For $a,b\in A$, if $a\Xequiv b$ then $a$ and $b$ belong to the same equivalence class. We denote the equivalence class of $a$ as $[a]$. The set of all equivalence classes in $A$ with respect to $\Xi$ is called the \textit{quotient set} of $A$ by $\Xi$, denoted $A/\Xi$.
+An equivalence relation $\Xi$ partitions $S$ into subsets called equivalence classes. If $a\Xequiv b$ then $a$ and $b$ belong to the same equivalence class. We denote the equivalence class of $a$ as $[a]$. The set of all equivalence classes in $S$ with respect to $\Xi$ is called the \textit{quotient set} of $S$ by $\Xi$, denoted $S/\Xi$.
 \end{defn}
 
 \begin{defn}
-A \textit{section} is a function $f:A/\Xi\rightarrow A$ that maps an equivalence class to one of its members. The member $f([a])$ is called the \textit{representative} of $[a]$ with respect to $f$.
+A \textit{section} is a function $f:S/\Xi\rightarrow S$ that maps an equivalence class to one of its members. The member $f([a])$ is called the \textit{representative} of $[a]$ with respect to $f$.
 \end{defn}
 
 % ...

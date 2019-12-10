@@ -2,18 +2,18 @@
 
 % Body 2 section
 
-\section{Formulation based on reparameterization}
+\section{Reparameterization formulation}
 
-The formulation based on equivalence classes is useful as a post-processing step when the main concern of having symmetries is parameter nonidentifiability. However, when the presence of symmetries impact the performance of the inference algorithm, symmetry breaking should look to be done prior to inference. The equivalence class formulation cannot be used in this situation for two reasons. The first is that without having done inference, the equivalence classes are symbolic and generally difficult to work with. The second reason is that the symmetry breaker returns a specific representative of the equivalence class but does not actually remove the symmetry from the model. These reasons make the equivalence class formulation inappropriate for breaking symmetries pre-inference.
+The equivalence class formulation is useful as a post-processing step after inference when parameter nonidentifiability is the primary concern. However, parameter symmetries may also impact the performance of the inference algorithm in which case symmetry breaking should be done before inference. The equivalence class formulation is less relevant in this situation for two reasons. The first is that without having done inference, the equivalence classes are symbolic and generally difficult to work with. The second reason is that the symmetry breaker returns a representative of the equivalence class but does not actually remove the symmetry from the model. These reasons make the equivalence class formulation unhelpful for describing pre-inference symmetry breaking.
 
-We present a second formulation of symmetry breaking based on reparameterizing the model which can be done before performing inference. The formulation directly builds on the symmetry detection approaches proposed in Nishihara et al. by changing the factor graph in such a way that the approaches detect no symmetries. We preface this section with a note that the ideas presented here are still relatively preliminary. In particular, further consideration of how this approach could be automated in a probabilistic program would be needed.
+We introduce a second formulation of symmetry breaking based on reparameterizing the model which can be done before performing inference. The formulation directly builds on the symmetry detection approaches presented by Nishihara et al. by changing the factor graph in such a way that the approaches detect no symmetries. We preface this section by noting that the ideas presented here are still relatively preliminary. In particular, development of a formal framework and further consideration of how this approach could be automated in a probabilistic program would be necessary.
 
 
 \subsection{Scaling symmetries}
 
-The approach proposed by Nishihara et al. for detecting scaling symmetries is based on constructing the constraint matrix and finding its null space. In other words, a scaling symmetry is present if the constraint matrix is underdetermined. Our approach under the reparameterization formulation is to modify the factor graph so that the constraint matrix becomes a determined system. We present this approach from two perspectives. 
+The approach for detecting scaling symmetries involves constructing the constraint matrix of a factor graph and finding its null space. In other words, the model has a scaling symmetry if the constraint matrix is underdetermined. Our approach for symmetry breaking under the reparameterization formulation is to modify the factor graph so that the constraint matrix becomes a determined system. We discuss this approach from two perspectives. 
 
-The first perspective looks at breaking the symmetry by reducing the number of variables in the factor graph. This corresponds to deleting columns of the constraint matrix and can be done by either removing or merging factors depending on the structure of the factor graph. For example, the ternary sum of common distributions from a single distribution family can typically be specified by another well-known distribution. If a scaling symmetry is introduced through a sum factor that takes in multiple Gaussian inputs, the sum and the Gaussian inputs may be replaced by a single Gaussian factor representing the sum. This breaks the scaling symmetry originating from the original sum factor in the factor graph. Figure \ref{fig:mergefactor} shows what this looks like graphically.
+The first perspective looks at breaking the symmetry by reducing the number of variables in the factor graph. This corresponds to deleting columns of the constraint matrix and can be done by either removing or merging factors depending on the structure of the factor graph. For example, the ternary sum of common distributions from a single distribution family can usually be specified by another well-known distribution. If a scaling symmetry is introduced through a sum factor that takes in multiple Gaussian inputs, the sum and the Gaussian inputs may be replaced by a single Gaussian factor representing the sum. This breaks the scaling symmetry originating from the sum factor in the original factor graph. Figure \ref{fig:mergefactor} demonstrates what this process looks like graphically.
 
 \begin{figure}[h]
 \begin{center}
@@ -44,7 +44,7 @@ The first perspective looks at breaking the symmetry by reducing the number of v
 \label{fig:mergefactor}
 \end{figure}
 
-The second perspective looks at breaking the symmetry by imposing additional constraints, which corresponds to adding new rows to the constraint matrix. The most obvious constraint that can be added is to make a variable observed. This fixes the variable so that it cannot be scaled, and is done in the constraint matrix by adding the row $d_n=0$. The graphical representation of this is shown in Figure \ref{fig:observevariable}. Other constraints may be introduced by either adding new factors or imposing additional constraints on existing ones.
+The second perspective looks at breaking the symmetry by imposing additional constraints, which corresponds to adding new rows to the constraint matrix. The most obvious constraint that can be added is to make a latent variable observed. This fixes the variable so that it cannot be scaled, and is done in the constraint matrix by adding the row $d_n=0$. The graphical representation of this is shown in Figure \ref{fig:observevariable}. Other constraints may be introduced by either adding new factors or imposing additional constraints on existing ones.
 
 \begin{figure}[h]
 \begin{center}
@@ -71,14 +71,14 @@ The second perspective looks at breaking the symmetry by imposing additional con
 \draw[-latex,line width=3pt] (old) -- (new) node[midway,yshift=0.35cm] {observe $\theta_1$}
 }
 \end{center}
-\caption{An example of imposing additional constraints to break scaling symmetry.}
+\caption{An example of imposing additional constraints to break a scaling symmetry.}
 \label{fig:observevariable}
 \end{figure}
 
 
 \subsection{Permutation symmetries}
 
-Nishihara et al. reduces detection of permutation symmetries to a problem of finding the automorphism of a labeled graph. An automorphism may exist due to the symmetric arguments of a factor being annotated with the same label. The symmetry in the arguments can be removed however by imposing an additional constraint based on ordering. For example, the sum factor $c=a+b$ is no longer symmetric with respect to $a$ and $b$ under the constraint $a<b$. This is equivalent to reparameterizing the factor graph such that the inputs to the factor are order statistics. Under this new parameterization, the inputs no longer receive the same label and so the only automorphism of the factor graph is the factor graph itself. Figure \ref{fig:changeprior} shows what this reparameterization may look like graphically.
+Nishihara et al. reduces detection of permutation symmetries to detection of automorphisms of a labeled graph. An automorphism may exist due to the symmetric arguments of a factor being annotated with the same label. The permutation symmetry can be broken by imposing additional constraints such that the arguments no longer receive the same label. One constraint that achieves this is the ordering constraint. For example, the sum factor $c=a+b$ is no longer symmetric with respect to $a$ and $b$ under the constraint $a<b$. This is equivalent to reparameterizing the factor graph by changing the inputs of the factor to the order statistics. Under this new parameterization, the arguments receive different labels and so the factor is no longer a source of possible automorphism. Figure \ref{fig:changeprior} shows what this reparameterization may look like graphically.
 
 \begin{figure}[h]
 \begin{center}
@@ -112,7 +112,7 @@ Nishihara et al. reduces detection of permutation symmetries to a problem of fin
 
 \subsection{Remarks regarding reparameterization}
 
-Our formulation of symmetry breaking via reparameterization covers a broad class of techniques and closely resembles the symmetry breaking done in the literature. However, the flexibility that this formulation allows makes it difficult to automate for a general model in a probabilistic programming setting. In addition, changing the factor graph is also likely to change the posterior distribution or at least its assumptions. For example, there may be a practical reason to include multiple Gaussian inputs instead of a single combined Gaussian input. Fixing a variable for mathematical convenience is also something to question. An ideal solution to this problem would be to reparameterize the model in a way such that the original model could be recovered after inference.
+The reparameterization formulation of symmetry breaking covers a broad class of techniques and closely resembles the symmetry breaking done in the literature. However, the flexibility that the formulation allows makes it difficult to automate for a general model in a probabilistic program. A formal framework that reasons about the types of reparameterizations allowed would be needed to make progress towards automation. In addition, changing the factor graph is also likely to change the posterior distribution or at least its assumptions. For example, there may be a practical reason to include multiple Gaussian inputs instead of a single combined Gaussian input. Fixing a variable for mathematical convenience is also something to question. An ideal solution to this problem would be to reparameterize the model in a way such that the original model could be recovered after inference.
 
 
 % ...
