@@ -17,7 +17,7 @@ Consider $\theta_1, \theta_2, \theta_3\in\Theta$.
 \begin{enumerate}
 
 \item
-\textbf{reflexivity}: let $\sigma$ be the identity map. Then $F_k(\theta_1) = F_k(\sigma(\theta_1))$ for all $k$.
+\textbf{reflexivity}: let $\sigma$ be the identity map. Then $F_k(\theta_1) = F_k(\sigma(\theta_1))$ for all $k$ and so $\theta_1\Xequiv\theta_1$.
 
 \item
 \textbf{symmetry}: suppose $\theta_1\Xequiv\theta_2$. Then there exists some local symmetry $\sigma$ such that $\sigma(\theta_1)=\theta_2$ and $F_k(\theta_1) \propto F_k(\theta_2)$ for all non-prior $F_k$. By definition of symmetry, $\sigma^{-1}$ exists and $\sigma^{-1}(\theta_2)=\theta_1$. Then
@@ -75,7 +75,7 @@ We now show how detection and breaking of scaling and permutation symmetries are
 We define scaling symmetry detection and breaking under the equivalence class formulation.
 
 \begin{defn}
-Let $\Sigma_d$ be the diagonal matrix with $(e^{d_1},...,e^{d_N})$ on the diagonal. A scaling symmetry $\sigma_d$ can be written as
+Let $\Sigma_d$ be the diagonal matrix with $(e^{d_1},...,e^{d_N})$ on the diagonal where $d_n\in\mathbb{R}$. A scaling symmetry $\sigma_d$ can be written as
 \[
 \sigma_d(\theta)=\Sigma_d\theta
 \]

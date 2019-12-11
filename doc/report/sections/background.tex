@@ -13,7 +13,7 @@ The problems of parameter symmetries provide motivation for \textit{detecting} a
 
 \subsection{Definitions and notations}
 
-We borrow the notation used by Nishihara et al. We represent probabilistic models using factor graphs $(\theta,F)$ with variables $\theta=(\theta_1,...,\theta_N)$ and factors $F=(F_1,...,F_K)$. Let $\Theta$ denote the space of variable values. $\theta\in\Theta$ contains all parameters, latent variables, and observations (which are fixed). $F$ represents all functions, operations, constraints, priors and likelihoods that the posterior distribution may factorize into. Figure \ref{fig:factorgraph} shows an example factor graph from Nishihara et al.
+We borrow the notation used by Nishihara et al. \cite{Nishihara:2013}. We represent probabilistic models using factor graphs $(\theta,F)$ with variables $\theta=(\theta_1,...,\theta_N)$ and factors $F=(F_1,...,F_K)$. Let $\Theta$ denote the space of variable values. $\theta\in\Theta$ contains all parameters, latent variables, and observations (which are fixed). $F$ represents all functions, operations, constraints, priors and likelihoods that the posterior distribution may factorize into. Figure \ref{fig:factorgraph} shows an example factor graph from Nishihara et al. \cite{Nishihara:2013}.
 
 \begin{figure}[h]
 \begin{center}
@@ -38,7 +38,7 @@ Given data, the unnormalized posterior distribution can then be expressed as
 \[
 \prod_kF_k(\theta)
 \]
-where factor $F_k$ may not necessarily depend on all of $\theta$. In the context of symmetries, priors are not of interest as it is assumed that the parameters of the prior are chosen by the user. The remainder of this report will refer to non-prior factors when considering $F_k$. We now formally introduce symmetries as defined in Nishihara et al.
+where factor $F_k$ may not necessarily depend on all of $\theta$. In the context of symmetries, priors are not of interest as it is assumed that the parameters of the prior are chosen by the user. The remainder of this report will refer to non-prior factors when considering $F_k$. We now formally introduce symmetries as defined in Nishihara et al. \cite{Nishihara:2013}.
 \begin{defn}
 A symmetry $\sigma:\Theta\rightarrow\Theta$ is a measurable function with a measurable inverse that satisfies
 \[
@@ -52,10 +52,10 @@ A local symmetry is a symmetry $\sigma$ that satisfies
 \[
 F_k(\theta) \propto F_k\left(\sigma(\theta)\right)
 \]
-for all non-prior factors $F_k$. In contrast to a symmetry, a local symmetry is a transformation on the variables that preserves the likelihood at each factor up to a scaling constant. Nishihara et al. mainly focuses on detecting local symmetries as they tend to be easier to identify than non-local symmetries.
+for all non-prior factors $F_k$. In contrast to a symmetry, a local symmetry is a transformation on the variables that preserves the likelihood at each factor up to a scaling constant. Nishihara et al. \cite{Nishihara:2013} mainly focuses on detecting local symmetries as they tend to be easier to identify than non-local symmetries.
 \end{defn}
 
-The paper by Nishihara et al. discusses several types of symmetries and how they can be detected for a given factor graph. Their work is presented in the context of a probabilistic programming language where it is assumed that all built-in factors have been annotated with constraints and/or labels that correspond to specific types of symmetries. In this report, we will assume that these annotations are intrinsic properties of the factors $F_k$ and hence are known for a given $(\theta,F)$. The next two subsections provide an overview of two types of symmetries and the approaches that Nishihara et al. use to detect them.
+The symmetry detection approaches proposed by Nishihara et al. is presented in the context of a probabilistic programming language where it is assumed that all built-in factors have been annotated with constraints or labels that correspond to specific types of symmetries. In this report, we will assume that these annotations are intrinsic properties of the factors $F_k$ and hence are known for a given $(\theta,F)$. The next two subsections provide an overview of two types of symmetries and the approaches for detecting them.
 
 
 \subsection{Scaling symmetries} \label{sec:scaling}
@@ -67,7 +67,7 @@ A scaling symmetry is a local symmetry $\sigma$ such that
 \[
 \sigma: (\theta_1,...,\theta_N) \longmapsto (r_1\theta_1,...,r_N\theta_N) = (e^{d_1}\theta_1,...,e^{d_N}\theta_N)
 \]
-where $r_n\in\mathbb{R}_+$ and $d_n=\log r_n$. The scaling symmety only considers positive scaling by definition. A symmetry that flips the signs of variables is a \textit{sign-flip symmetry} which we only briefly allude to in this report.
+where $r_n\in\mathbb{R}_+$ and $d_n=\log r_n$. The scaling symmetry only considers positive scaling by definition. A symmetry that flips the signs of variables is a \textit{sign-flip symmetry} which we only briefly allude to in this report.
 \end{defn}
 
 Scaling symmetries are detected by solving for the set of constants that the variables can scale by based on the aggregated factor constraints. Examples of factors and the constraints that they impose on scaling are provided in Table \ref{tab:scaling}. For instance, a \textit{sum factor} that sums inputs $a+b=c$ preserves its integrity under scaling only if both $a$, $b$, and $c$ are scaled by the same amount. This is enforced by the constraint $d_a=d_b=d_c$ that it imposes.
@@ -102,7 +102,7 @@ A permutation symmetry is a non-local symmetry $\sigma$ that permutes the compon
 for all \textit{factor labels} $c$. A factor label is an identifier of a factor that is shared only between factors of the same type. For example, all binary sum factors have the same label but a binary sum factor and a ternary sum factor do not.
 \end{defn}
 
-To detect permutation symmetries, all factors must have factor labels. Their arguments (incoming edges of the factor) must also be labeled such that two arguments share the same label if and only if the factor is symmetric with respect to those two. For example, the arguments $a$ and $b$ in the sum factor $c=a+b$ would have the same label if the input variables to $a$ and $b$ are symmetric. Given the labels, Nishihara et al. then reduces the detection problem to a graph \textit{automorphism} problem where the permutation symmetries of the factor graph are the automorphisms that preserve the factor and argument labels. In the context of graphs, an automorphism is a mapping of a graph onto itself that retains how the vertices and edges are connected. Detection of graph automorphisms can be done in quasipolynomial time \cite{Babai:2016} though in practice most graphs can be tested in linear time \cite{Babai:1980}.
+To detect permutation symmetries, all factors must have factor labels. Their arguments (incoming edges of the factor) must also be labeled such that two arguments share the same label if and only if the factor is symmetric with respect to those two. For example, the arguments $a$ and $b$ in the sum factor $c=a+b$ would have the same label if the input variables to $a$ and $b$ are symmetric. Given the labels, the detection problem can then be reduced to a graph \textit{automorphism} problem where the permutation symmetries of the factor graph are the automorphisms that preserve the factor and argument labels. In the context of graphs, an automorphism is a mapping of a graph onto itself that retains how the vertices and edges are connected. Detection of graph automorphisms can be done in quasipolynomial time \cite{Babai:2016} though in practice most graphs can be tested in linear time \cite{Babai:1980}.
 
 Note that the permutation symmetries found through this approach is dependent on the structure of the factor graph. For example, the approach will identify the symmetry across arguments $a$, $b$ and $c$ in the ternary sum factor $a+b+c$ but will only identify the symmetry for $a$, $b$ and for $a+b$, $c$ in the layered binary sum factors $(a+b)+c$.
 
@@ -125,7 +125,7 @@ We reference two examples in the literature where parameter symmetries were expl
 \[
 \mathbb{P}(y_i=1) = \text{logit}^{-1}\left(\gamma_{k,i}(\alpha_{j,i}-\beta_{k,i})\right)
 \]
-has a scaling symmetry where parameter $\gamma_k$ can be scaled by a constant and parameters $\alpha_j$ and $\beta_k$ divided by the same constant. Bafumi et al. \cite{Bafumi:2005} proposed two solutions to resolve this aliasing: constrain $\alpha_j$ to have a fixed distribution (e.g. standard normal) or introduce hyperpriors for the parameters and recover the original parameters after inference through normalization. Stephens et al. \cite{Stephens:2000} looked at permutation symmetries in a mixture model. They proposed a relabelling algorithm based on loss functions as an alternative to imposing ordering constraints on the parameters.
+has a scaling symmetry where parameter $\gamma_k$ can be scaled by a constant and parameters $\alpha_j$, $\beta_k$ divided by the same constant. Bafumi et al. \cite{Bafumi:2005} proposed two solutions to resolve this aliasing: constrain $\alpha_j$ to have a fixed distribution (e.g. standard normal) or introduce hyperpriors for the parameters and recover the original parameters after inference through normalization. Stephens et al. \cite{Stephens:2000} looked at permutation symmetries in a mixture model. They proposed a relabelling algorithm based on loss functions as an alternative to imposing ordering constraints on the parameters.
 
 These solutions, along with others in the literature, tend to be specific to the model and context. We note the techniques used in these solutions and consider ways to incorporate them in our formulations under a general model context.
 

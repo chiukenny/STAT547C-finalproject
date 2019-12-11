@@ -67,3 +67,8 @@ This project log is used to record the progress of this project.
 
 * Revised report.
 * Found error in proof of one exercise. Need to replace with another.
+
+### 2019-12-10
+
+* Added new exercise.
+* Fixed citations and final revision.

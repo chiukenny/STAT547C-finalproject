@@ -125,36 +125,31 @@ c\in\mathbb{R}
 \]
 \end{solution}
 
-\iffalse
 \item
-Let $\|\cdot\|$ denote the Euclidean norm. Suppose that for any equivalence class $[\theta]$, no two members have the same norm. Consider a symmetry breaker of the form
+Let $\|\cdot\|$ denote the Euclidean norm. Suppose that for any equivalence class $[\theta]$ of $\mathcal{F}$, no two members have the same norm. For some $r\in\mathbb{R}_+$, consider a function of the form
 \[
-\phi_\mathcal{F}([\theta])=\{\theta:\theta\in[\theta],\|\theta\|=1\}
+\phi_\mathcal{F}([\theta])=\{\theta:\|\theta\|=r,\theta\in[\theta]\}
 \]
-\fi
+Explain why this function is a not a well-defined symmetry breaker for all $[\theta]$. (\textit{Remark: here we use a singleton to denote the representative to allow this $\phi_\mathcal{F}$ to be defined in simple notation.})
+
+\begin{solution}
+By our definition, a symmetry breaker must return a member of the given equivalence class. It is possible that no member $\theta$ of the equivalence class satisfies $\|\theta\|=r$. For example, $[\theta^*]$ in the previous question has no members with $\|\theta\|<|\theta^*_5|$. Hence $\phi_\mathcal{F}$ is not a valid symmetry breaker for all equivalence classes in $\Theta/\Xi$.
+
+\textit{Remark: using this factor graph as an example, $\theta_5$ is assumed to be fixed at some value $\theta_5^*$ and so any $\theta'$ with $\theta_5'\neq\theta_5^*$ has $\mathbb{P}(\theta'=0)$. Symmetry breakers that are valid only over non-null sets may still be useful but are invalid under our current definition. This may suggest that the definition of symmetry breakers should be reconsidered to view $[\theta]$ as random with a probability distribution.}
+\end{solution}
 
 \end{enumerate}
 
-\iffalse
 \item
-Consider the equivalence class formulation. Suppose that a factor graph $\mathcal{F}$ has a scaling symmetry such that every equivalence class $[\theta]$ has a member $\theta^*$ with Euclidean norm $\|\theta^*\|=1$. Define
-\[
-\phi_\mathcal{F}([\theta])=\{\theta:\theta\in[\theta],\|\theta\|=1\}
-\]
-Show that $\phi_\mathcal{F}([\theta])$ is a singleton for any $[\theta]$, i.e., that $\phi_\mathcal{F}$ is a scaling symmetry breaker. (\textit{Remark: here we use a singleton to denote the representative to allow this $\phi_\mathcal{F}$ to be defined in simple notation.})
+Consider the equivalence class formulation. Show why a permutation symmetry breaker that selects a representative based on its Euclidean norm would not be useful.
 
 \begin{solution}
-We show this by contradiction.
-
-Suppose that for some equivalence class $[\theta]$, $\phi_\mathcal{F}([\theta])$ returns a set containing two members $\theta^*$ and $\theta$. By definition of $[\theta]$, we must have $\theta^*=\Sigma_{d^*}\theta$ for some $d^*\in\mathcal{N}(\mathcal{C})$. Then
+Let $[\theta]$ be any permutation equivalence class. Norm-based symmetry breakers are not useful for permutation symmetries because all members of an equivalence class have the same norm. By definition, if $\theta$, $\theta^*\in[\theta]$ then $\theta^*=\Pi^*\theta$ for some $\Pi^*\in\mathcal{F}$. Then
 \[
-\|\theta^*\| = \|\Sigma_{d^*}\theta\| = 1 = \|\theta\| \iff \Sigma_{d^*}^T\Sigma_{d^*} = \mathcal{I}
+\|\theta^*\| = \|\Pi^*\theta\| = \|\theta\|
 \]
-where $\mathcal{I}$ is the identity matrix. Hence $\Sigma_{d^*}$ must be orthogonal. But because $\Sigma_{d^*}$ is diagonal and positive definite, $\Sigma_{d^*}$ must be the identity matrix and so $\theta^*=\mathcal{I}\theta = \theta$. Contradiction and thus $\phi_\mathcal{F}$ returns a singleton for any $[\theta]$.
-
-We note that this $\phi_\mathcal{F}$ is only well-defined under the assumption that every equivalence class has some $\theta$ with unit norm. This is generally not true in all factor graphs. For example, a factor graph that has no scaling symmetries has every $\theta$ is in its own equivalence class but $\theta$ may not have a unit norm.
+because $\Pi^*$ is orthogonal.
 \end{solution}
-\fi
 
 \newpage
 
